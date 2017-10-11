@@ -24,8 +24,8 @@ namespace AdsSystem
         {
             try
             {
-                var url = request.Url.AbsolutePath;
-                Console.WriteLine(request.Url.AbsolutePath);
+                var regex = new Regex(@"(^[\w]+:[0-9]+)");
+                var url = regex.Replace(request.Url.AbsoluteUri, "");
                 string selectedAction = null;
 
                 foreach (var route in Routes)
@@ -82,6 +82,7 @@ namespace AdsSystem
                 string res = (string) method.Invoke(controller, new object[] { });
 
                 response = (HttpListenerResponse) resProp.GetValue(controller);
+                
                 _res(response, res);
             }
             catch (Exception e)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using HandlebarsDotNet;
 
 namespace AdsSystem
 {
@@ -8,6 +9,7 @@ namespace AdsSystem
     {
         private string _name;
         private string _content;
+        private Func<object, string> _template;
         private Dictionary<string, string> _vars = new Dictionary<string, string>();
 
         public View(string name)
@@ -27,20 +29,21 @@ namespace AdsSystem
         {
             try
             {
-                _content = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "../../", "Views", _name + ".html"));
+                var fileContent = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Views", _name + ".hdbs"));
+                _template = Handlebars.Compile(fileContent);
             }
             catch (Exception e)
             {
-                _content = e.Message;
+                _template = a => e.Message;
             }
         }
 
         public override string ToString()
         {
-            var content = _content;
-            foreach (var keyValuePair in _vars) 
-                content = content.Replace("{" + keyValuePair.Key + "}", keyValuePair.Value);
-            return content;
+//            var content = _content;
+//            foreach (var keyValuePair in _vars) 
+//                content = content.Replace("{" + keyValuePair.Key + "}", keyValuePair.Value);
+            return _template(_vars);
         }
     }
 }
