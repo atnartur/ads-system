@@ -29,7 +29,7 @@ namespace AdsSystem
         {
             try
             {
-                var fileContent = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Views", _name + ".hdbs"));
+                var fileContent = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Views", _name + ".hbs"));
                 _template = Handlebars.Compile(fileContent);
             }
             catch (Exception e)
