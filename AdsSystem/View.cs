@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using HandlebarsDotNet;
 
 namespace AdsSystem
@@ -8,7 +9,10 @@ namespace AdsSystem
     public class View
     {
         private string _name;
-        private Dictionary<string, string> _vars = new Dictionary<string, string>();
+        private Dictionary<string, string> _vars = new Dictionary<string, string>()
+        {
+            {"body_classes", "hold-transition skin-blue sidebar-mini"}
+        };
 
         public View(string name)
         {
@@ -18,7 +22,8 @@ namespace AdsSystem
         public View(string name, Dictionary<string, string> vars)
         {
             _name = name;
-            _vars = vars;
+            foreach (var keyValuePair in vars)
+                _vars[keyValuePair.Key] = keyValuePair.Value;
         }
 
         private string _open(string name) => 
@@ -26,8 +31,13 @@ namespace AdsSystem
 
         public override string ToString()
         {
-            _vars["content"] = Handlebars.Compile(_open(_name))(_vars);
-            return Handlebars.Compile(_open("layout"))(_vars);
+            var wrap = Handlebars.Compile(_open("wrap"));
+            var layout = Handlebars.Compile(_open("layouts/" + _vars.GetValueOrDefault("layout", "main")));
+            var template = Handlebars.Compile(_open(_name));
+            
+            _vars["content"] = template(_vars);
+            _vars["content"] = layout(_vars);
+            return wrap(_vars);
         }
     }
 }

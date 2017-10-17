@@ -12,7 +12,8 @@ namespace AdsSystem
     {
         private static Dictionary<string, string> Routes = new Dictionary<string, string>()
         {
-            {@"GET ^\/$", "IndexController.Index"}
+            {@"GET ^\/$", "IndexController.Index"},
+            {@"GET ^\/login$", "IndexController.Login"}
         };
 
         private static void _res(HttpListenerResponse res, string body)
