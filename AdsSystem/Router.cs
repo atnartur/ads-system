@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using HeyRed.Mime; 
 
 namespace AdsSystem
 {
@@ -88,13 +89,18 @@ namespace AdsSystem
                     _invokeAction(selectedAction, request, response);
                 else
                 {
-                    var staticFilePath = Path.Combine(Environment.CurrentDirectory, "public", url.Substring(1));
+                    var urlArr = url.Substring(1).Split('?');
+                    var staticFilePath = Path.Combine(Environment.CurrentDirectory, "public", urlArr[0]);
                     
                     if (!File.Exists(staticFilePath))
                         _invokeAction("ErrorController.E404", request, response);
                     else
                     {
                         selectedAction = "static";
+                        
+                        string mime = MimeTypesMap.GetMimeType(Path.GetFileName(url));
+                        response.Headers["Content-Type"] = mime;
+                        
                         using (var sr = new StreamReader(staticFilePath))
                         {
                             while (!sr.EndOfStream)
