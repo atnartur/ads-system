@@ -8,42 +8,26 @@ namespace AdsSystem
     public class View
     {
         private string _name;
-        private string _content;
-        private Func<object, string> _template;
         private Dictionary<string, string> _vars = new Dictionary<string, string>();
 
         public View(string name)
         {
             _name = name;
-            _read();
         }
         
         public View(string name, Dictionary<string, string> vars)
         {
             _name = name;
             _vars = vars;
-            _read();
         }
 
-        private void _read()
-        {
-            try
-            {
-                var fileContent = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Views", _name + ".hbs"));
-                _template = Handlebars.Compile(fileContent);
-            }
-            catch (Exception e)
-            {
-                _template = a => e.Message;
-            }
-        }
+        private string _open(string name) => 
+            File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Views", name + ".hbs"));
 
         public override string ToString()
         {
-//            var content = _content;
-//            foreach (var keyValuePair in _vars) 
-//                content = content.Replace("{" + keyValuePair.Key + "}", keyValuePair.Value);
-            return _template(_vars);
+            _vars["content"] = Handlebars.Compile(_open(_name))(_vars);
+            return Handlebars.Compile(_open("layout"))(_vars);
         }
     }
 }
