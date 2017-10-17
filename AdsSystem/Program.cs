@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Data.Entity;
+using AdsSystem.Db;
 
 namespace AdsSystem
 {
@@ -7,6 +8,8 @@ namespace AdsSystem
     {
         public static void Main(string[] args)
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, MigrationConfiguration>());
+            
             var listener = new System.Net.Http.HttpListener(System.Net.IPAddress.Parse("0.0.0.0"), 8081);
             try
             {
