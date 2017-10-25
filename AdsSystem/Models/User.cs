@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace AdsSystem.Models
 {
@@ -14,8 +17,16 @@ namespace AdsSystem.Models
         
         [StringLength(255)]
         public string Name { get; set; }
+
+        private string _pass;
         
         [StringLength(255)]
-        public string Pass { get; set; }
+        public string Pass { get => _pass; set => _pass = PassHash(value); }
+
+        public static string PassHash(string pass)
+        {
+            var hash = (new SHA1Managed()).ComputeHash(Encoding.UTF8.GetBytes(pass));
+            return string.Join("", hash.Select(b => b.ToString("x2")).ToArray());
+        }
     }
 }

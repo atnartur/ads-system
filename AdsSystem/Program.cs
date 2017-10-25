@@ -1,37 +1,30 @@
-﻿using System;
-using AdsSystem.Models;
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdsSystem
 {
     internal class Program
     {
+        class Startup
+        {
+            public void Configure(IApplicationBuilder app,IHostingEnvironment env) =>
+                app.Run(async context => Router.Dispatch(context.Request, context.Response));
+        }
+        
         public static void Main(string[] args)
         {
-//            var dbContext = Db.Context.Instance;
-//            
-//            dbContext.Users.Add(new User()
-//            {
-//                Email = "a@a.ru",
-//                Name = "atnartur",
-//                Pass = "asd"
-//            });
-//            dbContext.SaveChanges();
-            var listener = new System.Net.Http.HttpListener(System.Net.IPAddress.Parse("0.0.0.0"), 8081);
-            try
-            {
-                listener.Request += (sender, context) => Router.Dispatch(context.Request, context.Response);
-                listener.Start();
-                Console.WriteLine("Server is running");
-                Console.ReadKey();
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine(exc.ToString());
-            }
-            finally
-            {
-                listener.Close();
-            }        
+            using (var instance = Db.Instance)
+                instance.Database.Migrate();
+            
+            var host = new WebHostBuilder()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseStartup<Startup>()
+                .UseKestrel()
+                .Build();
+
+            host.Run();
         }
     }
 }

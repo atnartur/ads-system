@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AdsSystem.Controllers
 {
@@ -18,6 +19,12 @@ namespace AdsSystem.Controllers
                 {"layout", "empty"},
                 {"body_classes", "hold-transition login-page"}
             }).ToString();
+        }
+
+        public string LoginHandler()
+        {
+            Console.WriteLine(Request.Form["login"] + " " + Request.Form["pass"]);
+            return "";
         }
     }
 }

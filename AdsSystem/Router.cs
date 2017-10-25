@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using HeyRed.Mime; 
 
 namespace AdsSystem
@@ -13,18 +13,18 @@ namespace AdsSystem
         private static Dictionary<string, string> Routes = new Dictionary<string, string>()
         {
             {@"GET ^\/$", "IndexController.Index"},
-            {@"GET ^\/login$", "IndexController.Login"}
+            {@"GET ^\/login$", "IndexController.Login"},
+            {@"POST ^\/login$", "IndexController.LoginHandler"}
         };
 
-        private static void _res(HttpListenerResponse res, string body)
+        private static void _res(HttpResponse res, string body)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(body);
-            res.OutputStream.Write(buffer, 0, buffer.Length);
-            res.Close();
+            res.Body.Write(buffer, 0, buffer.Length);
+            res.Body.Close();
         }
 
-        private static void _invokeAction(string selectedAction, HttpListenerRequest request,
-            HttpListenerResponse response)
+        private static void _invokeAction(string selectedAction, HttpRequest request, HttpResponse response)
         {
             var action = selectedAction.Split('.');
             var baseNamespace = typeof(Router).Namespace.Split('.')[0];
@@ -55,17 +55,18 @@ namespace AdsSystem
             var method = cls.GetMethod(action[1]);
             string res = (string) method.Invoke(controller, new object[] { });
 
-            response = (HttpListenerResponse) resProp.GetValue(controller);
+            response = (HttpResponse) resProp.GetValue(controller);
 
             _res(response, res);
         }
         
-        public static void Dispatch(HttpListenerRequest request, HttpListenerResponse response)
+        public static void Dispatch(HttpRequest request, HttpResponse response)
         {
             try
             {
-                var regex = new Regex(@"(^[\w]+:[0-9]+)");
-                var url = regex.Replace(request.Url.AbsoluteUri, "");
+//                var regex = new Regex(@"(^[\w]+:[0-9]+)");
+//                var url = regex.Replace(request.RawUrl.AbsoluteUri, "");
+                var url = request.Path.Value;
                 string selectedAction = null;
 
                 foreach (var route in Routes)
@@ -73,7 +74,7 @@ namespace AdsSystem
                     var key = route.Key.Split(' ');
                     var httpMethod = key[0];
 
-                    if (request.HttpMethod != httpMethod)
+                    if (request.Method != httpMethod)
                         continue;
 
                     var r = Regex.Matches(url, key[1]);
@@ -107,13 +108,13 @@ namespace AdsSystem
                             while (!sr.EndOfStream)
                             {
                                 byte[] buffer = Encoding.UTF8.GetBytes(sr.ReadLine() + "\n");
-                                response.OutputStream.Write(buffer, 0, buffer.Length);
+                                response.Body.Write(buffer, 0, buffer.Length);
                             }
                         }
-                        response.Close();
+                        response.Body.Close();
                     }
                 }
-                Console.WriteLine(request.HttpMethod + " " + url + " " + (selectedAction != null ? "ok" : "error") +
+                Console.WriteLine(request.Method + " " + url + " " + (selectedAction != null ? "ok" : "error") +
                                   " " + DateTime.Now + ":" + DateTime.Now.Millisecond);
             }
             catch (Exception e)

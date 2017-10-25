@@ -1,10 +1,10 @@
-﻿using System.Net.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace AdsSystem.Controllers
 {
     public class ControllerBase
     {
-        public HttpListenerRequest Request { get; set; }
-        public HttpListenerResponse Response { get; set; }
+        public HttpRequest Request { get; set; }
+        public HttpResponse Response { get; set; }
     }
 }
