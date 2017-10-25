@@ -5,9 +5,11 @@ EXPOSE 8081
 
 COPY . .
 
-RUN dotnet restore ./AdsSystem.sln && dotnet publish ./AdsSystem.sln -c Release -o ./build
+RUN dotnet restore ./AdsSystem.sln && \
+	dotnet build ./AdsSystem.sln -o ./build # -c Release
+	# dotnet publish ./AdsSystem.sln -c Release -o ./build
 
 WORKDIR /app/AdsSystem
 
 CMD dotnet run
-ENTRYPOINT dotnet run
+
