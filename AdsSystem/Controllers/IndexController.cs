@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Security.Authentication;
+using AdsSystem.Libs;
 
 namespace AdsSystem.Controllers
 {
@@ -7,24 +8,37 @@ namespace AdsSystem.Controllers
     {   
         public string Index()
         {
-            Response.StatusCode = 302;
-            Response.Headers["Location"] = "/login";
-            return "";//new View("Index").ToString();
+            return new View("Index").ToString();
         }
 
+        private Dictionary<string, string> _loginViewParams = new Dictionary<string, string>()
+        {
+            {"layout", "empty"},
+            {"body_classes", "hold-transition login-page"}
+        }; 
+        
         public string Login()
         {
-            return new View("Login", new Dictionary<string, string>()
-            {
-                {"layout", "empty"},
-                {"body_classes", "hold-transition login-page"}
-            }).ToString();
+            if (User != null)
+                return Redirect("/");
+            return new View("Login", _loginViewParams).ToString();
         }
 
         public string LoginHandler()
         {
-            Console.WriteLine(Request.Form["login"] + " " + Request.Form["pass"]);
-            return "";
+            if (User != null)
+                return Redirect("/");
+            try
+            {
+                var user = Auth.Login(Request.Form["email"], Request.Form["pass"]);
+                Auth.Remember(Response, user);
+                Response.Redirect("/");
+            }
+            catch (AuthenticationException)
+            {
+                _loginViewParams["error"] = "Неправильный логин или пароль";                
+            }
+            return new View("Login", _loginViewParams).ToString();
         }
     }
 }

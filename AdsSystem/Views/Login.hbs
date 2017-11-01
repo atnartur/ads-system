@@ -4,6 +4,13 @@
     </div>
     <div class="login-box-body">
         <form action="" method="post">
+            {{#if error}}
+                <div class="callout callout-danger">
+                    <h4>Произошла ошибка при входе</h4>
+
+                    <p>{{error}}</p>
+                </div>
+            {{/if}}
             <div class="form-group has-feedback">
                 <input type="email" class="form-control" name="email" placeholder="Email">
             </div>

@@ -51,10 +51,19 @@ namespace AdsSystem
 
             reqProp.SetValue(controller, request);
             resProp.SetValue(controller, response);
-
-            var method = cls.GetMethod(action[1]);
-            string res = (string) method.Invoke(controller, new object[] { });
-
+            
+            bool isNeedInvokeAction = true;
+            string res = "";
+            
+            var beforeActionMethod = cls.GetMethod("BeforeAction");
+            if (beforeActionMethod != null)
+                isNeedInvokeAction = (bool) beforeActionMethod.Invoke(controller, new [] { request.Method, action[0], action[1] });
+            
+            if (isNeedInvokeAction)
+            {
+                var method = cls.GetMethod(action[1]);
+                res = (string) method.Invoke(controller, new object[] { });
+            }
             response = (HttpResponse) resProp.GetValue(controller);
 
             _res(response, res);
@@ -64,8 +73,6 @@ namespace AdsSystem
         {
             try
             {
-//                var regex = new Regex(@"(^[\w]+:[0-9]+)");
-//                var url = regex.Replace(request.RawUrl.AbsoluteUri, "");
                 var url = request.Path.Value;
                 string selectedAction = null;
 
