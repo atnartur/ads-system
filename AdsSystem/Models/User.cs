@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -39,6 +40,13 @@ namespace AdsSystem.Models
         /// Получить авторизационный токен пользователя
         /// </summary>
         /// <returns></returns>
-        public string Token() => PassHash(Pass + Id + new DateTime().Year + Email); 
+        public string Token() => PassHash(Pass + Id + new DateTime().Year + Email);
+
+        public Dictionary<string, string> Labels = new Dictionary<string, string>
+        {
+            {"Email", "E-mail"},
+            {"Name", "Имя"},
+            {"Pass", "Пароль"}
+        };
     }
 }

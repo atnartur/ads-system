@@ -1,91 +1,27 @@
 <form class="form-horizontal" method="post" action="">
     <div class="form-group">
-        <label class="control-label col-md-2" for="course_type">Тип курса</label>
+        <label class="control-label col-md-2" for="Email">Email</label>
         <div class="col-md-6">
-            <select name="course_type" class="form-control">
-                <option value="">Выбрать</option>
-                <option value="individual" <?php
-                    if(@$info->course_type == 'individual')
-                echo 'selected';
-                ?>>Индивидуальный</option>
-                <option value="group"<?php
-                    if(@$info->course_type == 'group')
-                echo 'selected';
-                ?>>Групповой</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group" style="display:none">
-        <label class="control-label col-md-2" for="group_course_type_id">Тип группы</label>
-        <div class="col-md-6">
-            <select name="group_course_type_id" class="form-control">
-                <option value="">Выбрать</option>
-                <?php foreach($group_course_types as $type): ?>
-                <option value="<?=$type->id?>" <?php
-                            if(@$info->group_course_type_id == $type->id)
-                echo 'selected';
-                ?>><?=$type->name?></option>
-                <?php endforeach; ?>
-            </select>
+            <input type="email" required class="form-control" name="Email" id="Email" value="{{info.Email}}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-md-2" for="lang_id">Язык</label>
+        <label class="control-label col-md-2" for="Name">Имя</label>
         <div class="col-md-6">
-            <select name="lang_id" class="form-control">
-                <option value="">Выбрать</option>
-                <?php foreach($langs as $lang): ?>
-                <option value="<?=$lang->id?>" <?php
-                            if(@$info->lang_id == $lang->id)
-                echo 'selected';
-                ?>><?=$lang->name?></option>
-                <?php endforeach; ?>
-            </select>
+            <input type="text" required class="form-control" name="Name" id="Name" value="{{info.Name}}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-md-2" for="level_id">Уровень</label>
+        <label class="control-label col-md-2" for="Pass">Пароль</label>
         <div class="col-md-6">
-            <select name="level_id" class="form-control">
-                <option value="">Выбрать</option>
-                <?php foreach($levels as $level): ?>
-                <option value="<?=$level->id?>" <?php
-                            if(@$info->level_id == $level->id)
-                echo 'selected';
-                ?>><?=$level->name?></option>
-                <?php endforeach; ?>
-            </select>
+            <input type="password" class="form-control" name="Pass" id="Pass"
+                {{#if info.Id}}
+                    placeholder="Старый пароль не показывается"
+                {{/if}}
+                {{#unless info.Id}} required {{/unless}}
+            >
         </div>
     </div>
-    <div class="form-group">
-        <label class="control-label col-md-2" for="teacher_admin_id">Преподаватель</label>
-        <div class="col-md-6">
-            <select name="teacher_admin_id" class="form-control">
-                <option value="">Выбрать</option>
-                <?php foreach($admins as $admin): ?>
-                <option value="<?=$admin->id?>" <?php
-                            if(@$info->teacher_admin_id == $admin->id)
-                echo 'selected';
-                ?>><?=$admin->name?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-    <?=$this->partial('partials/inputs/textarea', array(
-    'label'=>'description',
-    'name'=>'Описание',
-    'standart' => @$info->description
-    ))?>
-    <?=$this->partial('partials/inputs/text', array(
-    'label'=>'start_date',
-    'name'=>'Дата начала',
-    'standart' => @$info->start_date
-    ))?>
-    <?=$this->partial('partials/inputs/text', array(
-    'label'=>'end_date',
-    'name'=>'Дата окончания',
-    'standart' => @$info->end_date
-    ))?>
     <div class="form-group">
         <div class="col-md-8 col-md-offset-2">
             <button type="submit" class="btn btn-primary">Сохранить</button>

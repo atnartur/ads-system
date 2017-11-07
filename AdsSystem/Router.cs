@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +23,7 @@ namespace AdsSystem
             {@"POST ^\/users/edit$", "UsersController.Edit"},
             {@"GET ^\/users/edit/([0-9]+)$", "UsersController.Edit"},
             {@"POST ^\/users/edit/([0-9]+)$", "UsersController.Edit"},
+            {@"GET ^\/users/delete/([0-9]+)$", "UsersController.Delete"},
         };
 
         private static void _res(HttpResponse res, string body)
@@ -29,7 +33,7 @@ namespace AdsSystem
             res.Body.Close();
         }
 
-        private static void _invokeAction(string selectedAction, HttpRequest request, HttpResponse response)
+        private static void _invokeAction(string selectedAction, HttpRequest request, HttpResponse response, object[] parameters = null)
         {
             var action = selectedAction.Split('.');
             var baseNamespace = typeof(Router).Namespace.Split('.')[0];
@@ -66,8 +70,29 @@ namespace AdsSystem
             
             if (isNeedInvokeAction)
             {
-                var method = cls.GetMethod(action[1]);
-                res = (string) method.Invoke(controller, new object[] { });
+                parameters = parameters ?? new object[] { };
+                var method = cls.GetMethod(action[1], Enumerable.Repeat(typeof(string), parameters.Length).ToArray()); 
+                res = (string) method.Invoke(controller, parameters);
+//                foreach (var parameter in parameters)
+//                {
+//                    Console.WriteLine(parameter);
+//                }
+//                var paramsCheck = parameters != null && parameters.Length > 0;
+//                if (paramsCheck)
+//                {
+                //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
+//                }
+//                else
+//                {
+//                    var method = cls.GetMethod(action[1]); //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
+//                    res = (string) method.Invoke(controller, new object[]{});
+//                }
+//                Console.WriteLine(parameters.Length);
+//                Console.WriteLine(paramsCheck);
+                
+//                Console.WriteLine(method);
+                
+//                res = (string) method.Invoke(controller, paramsCheck ? parameters : new object[]{});
             }
             response = (HttpResponse) resProp.GetValue(controller);
 
@@ -80,6 +105,7 @@ namespace AdsSystem
             {
                 var url = request.Path.Value;
                 string selectedAction = null;
+                string[] parameters = null;
 
                 foreach (var route in Routes)
                 {
@@ -95,12 +121,14 @@ namespace AdsSystem
                     if (check)
                     {
                         selectedAction = route.Value;
+                        parameters = r.SelectMany(x => x.Groups).Skip(1).Select(x => x.Value).ToArray();
                         break;
                     }
                 }
                 
                 if (selectedAction != null)
-                    _invokeAction(selectedAction, request, response);
+                    // ReSharper disable once CoVariantArrayConversion
+                    _invokeAction(selectedAction, request, response, parameters);
                 else
                 {
                     var urlArr = url.Substring(1).Split('?');
