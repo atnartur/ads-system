@@ -1,4 +1,5 @@
-﻿using AdsSystem.Libs;
+﻿using System.Collections.Generic;
+using AdsSystem.Libs;
 using AdsSystem.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -37,6 +38,18 @@ namespace AdsSystem.Controllers
                 }
             }
             return true;
+        }
+
+        
+        public string View(string name)
+        {
+            return View(name, new Dictionary<string, object>());
+        }
+    
+        public string View(string name, Dictionary<string, object> vars)
+        {
+            return new View(name, vars).ToString();
+        
         }
     }
 }

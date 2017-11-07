@@ -9,7 +9,7 @@ namespace AdsSystem
     public class View
     {
         private string _name;
-        private Dictionary<string, string> _vars = new Dictionary<string, string>()
+        private Dictionary<string, object> _vars = new Dictionary<string, object>()
         {
             {"body_classes", "hold-transition skin-blue sidebar-mini"}
         };
@@ -19,7 +19,7 @@ namespace AdsSystem
             _name = name;
         }
         
-        public View(string name, Dictionary<string, string> vars)
+        public View(string name, Dictionary<string, object> vars)
         {
             _name = name;
             foreach (var keyValuePair in vars)

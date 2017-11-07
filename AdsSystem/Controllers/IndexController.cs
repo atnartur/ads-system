@@ -8,10 +8,10 @@ namespace AdsSystem.Controllers
     {   
         public string Index()
         {
-            return new View("Index").ToString();
+            return Redirect("/users");
         }
 
-        private Dictionary<string, string> _loginViewParams = new Dictionary<string, string>()
+        private Dictionary<string, object> _loginViewParams = new Dictionary<string, object>()
         {
             {"layout", "empty"},
             {"body_classes", "hold-transition login-page"}

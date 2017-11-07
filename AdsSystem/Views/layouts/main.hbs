@@ -25,12 +25,24 @@
         <aside class="main-sidebar">
             <section class="sidebar">
                 <ul class="sidebar-menu" id="menu">
-                    <li><a href="#"><i class="fa fa-users"></i> <span>Администраторы</span></a></li>
+                    <li><a href="/users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
                 </ul>
             </section>
         </aside>
         <div class="content-wrapper">
-            {{{content}}}
+            {{#if title}}
+                <section class="content-header">
+                    <h1>{{title}}</h1>
+                </section>
+            {{/if}}
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        {{{content}}}
+                    </div>
+                </div>
+            </div>
+            
         </div><!-- /.content-wrapper -->
         <footer class="main-footer">
             <strong>&copy; 2017 <a href="http://i.atnartur.ru" target="_blank">Артур Атнагулов</a>.</strong>

@@ -14,7 +14,12 @@ namespace AdsSystem
         {
             {@"GET ^\/$", "IndexController.Index"},
             {@"GET ^\/login$", "IndexController.Login"},
-            {@"POST ^\/login$", "IndexController.LoginHandler"}
+            {@"POST ^\/login$", "IndexController.LoginHandler"},
+            {@"GET ^\/users$", "UsersController.Index"},
+            {@"GET ^\/users/edit$", "UsersController.Edit"},
+            {@"POST ^\/users/edit$", "UsersController.Edit"},
+            {@"GET ^\/users/edit/([0-9]+)$", "UsersController.Edit"},
+            {@"POST ^\/users/edit/([0-9]+)$", "UsersController.Edit"},
         };
 
         private static void _res(HttpResponse res, string body)
