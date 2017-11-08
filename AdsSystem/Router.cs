@@ -73,26 +73,6 @@ namespace AdsSystem
                 parameters = parameters ?? new object[] { };
                 var method = cls.GetMethod(action[1], Enumerable.Repeat(typeof(string), parameters.Length).ToArray()); 
                 res = (string) method.Invoke(controller, parameters);
-//                foreach (var parameter in parameters)
-//                {
-//                    Console.WriteLine(parameter);
-//                }
-//                var paramsCheck = parameters != null && parameters.Length > 0;
-//                if (paramsCheck)
-//                {
-                //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
-//                }
-//                else
-//                {
-//                    var method = cls.GetMethod(action[1]); //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
-//                    res = (string) method.Invoke(controller, new object[]{});
-//                }
-//                Console.WriteLine(parameters.Length);
-//                Console.WriteLine(paramsCheck);
-                
-//                Console.WriteLine(method);
-                
-//                res = (string) method.Invoke(controller, paramsCheck ? parameters : new object[]{});
             }
             response = (HttpResponse) resProp.GetValue(controller);
 
