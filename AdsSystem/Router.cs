@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -71,20 +70,25 @@ namespace AdsSystem
             if (isNeedInvokeAction)
             {
                 parameters = parameters ?? new object[] { };
-                var method = cls.GetMethod(action[1], Enumerable.Repeat(typeof(string), parameters.Length).ToArray()); 
+                var paramsCheck = parameters != null && parameters.Length > 0;
+                var a = Enumerable.Repeat(typeof(object), parameters.Length).ToArray<object>();
+                var b = controller.GetType().GetMethod(action[1]).GetParameters().Select(x => Type.Missing).ToArray();
+                
+                var method = cls.GetMethod(action[1], paramsCheck ? a : b); 
+//                var method = cls.GetMethod(action[1], Enumerable.Repeat(Type.Missing, parameters.Length).ToArray()); 
                 res = (string) method.Invoke(controller, parameters);
 //                foreach (var parameter in parameters)
 //                {
 //                    Console.WriteLine(parameter);
 //                }
-//                var paramsCheck = parameters != null && parameters.Length > 0;
 //                if (paramsCheck)
 //                {
                 //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
 //                }
 //                else
 //                {
-//                    var method = cls.GetMethod(action[1]); //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
+//                    var method = cls.GetMethod(action[1]); 
+                //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
 //                    res = (string) method.Invoke(controller, new object[]{});
 //                }
 //                Console.WriteLine(parameters.Length);
