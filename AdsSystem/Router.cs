@@ -66,40 +66,14 @@ namespace AdsSystem
             var beforeActionMethod = cls.GetMethod("BeforeAction");
             if (beforeActionMethod != null)
                 isNeedInvokeAction = (bool) beforeActionMethod.Invoke(controller, new [] { request.Method, action[0], action[1] });
-            
+
             if (isNeedInvokeAction)
             {
-                parameters = parameters ?? new object[] { };
-                var paramsCheck = parameters != null && parameters.Length > 0;
-                var a = Enumerable.Repeat(typeof(object), parameters.Length).ToArray<object>();
-                var b = controller.GetType().GetMethod(action[1]).GetParameters().Select(x => Type.Missing).ToArray();
-                
-//                var method = cls.GetMethod(action[1], paramsCheck ? a : b); 
-//                var method = cls.GetMethod(action[1], Enumerable.Repeat(Type.Missing, parameters.Length).ToArray());
-                var method = cls.GetTypeInfo().GetDeclaredMethod(action[1]);
-                
-//                cls.InvokeMember(action[1], BindingFlags.InvokeMethod | BindingFlags.OptionalParamBinding, )
-                res = (string) method.Invoke(controller, parameters);
-//                foreach (var parameter in parameters)
-//                {
-//                    Console.WriteLine(parameter);
-//                }
-//                if (paramsCheck)
-//                {
-                //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
-//                }
-//                else
-//                {
-//                    var method = cls.GetMethod(action[1]); 
-                //paramsCheck ? Enumerable.Repeat(typeof(string), parameters.Length).ToArray() : new Type[] {});
-//                    res = (string) method.Invoke(controller, new object[]{});
-//                }
-//                Console.WriteLine(parameters.Length);
-//                Console.WriteLine(paramsCheck);
-                
-//                Console.WriteLine(method);
-                
-//                res = (string) method.Invoke(controller, paramsCheck ? parameters : new object[]{});
+                res = (string) cls.GetMethod(action[1]).Invoke(controller, cls
+                    .GetMethod(action[1])
+                    .GetParameters()
+                    .Select((x, key) => parameters != null && key < parameters.Length && parameters[key] != null ? parameters[key] : Missing.Value)
+                    .ToArray());
             }
             response = (HttpResponse) resProp.GetValue(controller);
 

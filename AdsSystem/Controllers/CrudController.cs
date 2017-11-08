@@ -29,9 +29,6 @@ namespace AdsSystem.Controllers
             }
         }
 
-        // @TODO: не получилось разобраться с рефлексией, поэтому такой костыль
-//        public string Edit() => Edit(null);
-
         public string Edit(string id = null)
         {
             Console.WriteLine(id);
