@@ -74,8 +74,11 @@ namespace AdsSystem
                 var a = Enumerable.Repeat(typeof(object), parameters.Length).ToArray<object>();
                 var b = controller.GetType().GetMethod(action[1]).GetParameters().Select(x => Type.Missing).ToArray();
                 
-                var method = cls.GetMethod(action[1], paramsCheck ? a : b); 
-//                var method = cls.GetMethod(action[1], Enumerable.Repeat(Type.Missing, parameters.Length).ToArray()); 
+//                var method = cls.GetMethod(action[1], paramsCheck ? a : b); 
+//                var method = cls.GetMethod(action[1], Enumerable.Repeat(Type.Missing, parameters.Length).ToArray());
+                var method = cls.GetTypeInfo().GetDeclaredMethod(action[1]);
+                
+//                cls.InvokeMember(action[1], BindingFlags.InvokeMethod | BindingFlags.OptionalParamBinding, )
                 res = (string) method.Invoke(controller, parameters);
 //                foreach (var parameter in parameters)
 //                {
