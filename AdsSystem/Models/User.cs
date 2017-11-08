@@ -42,6 +42,7 @@ namespace AdsSystem.Models
         /// <returns></returns>
         public string Token() => PassHash(Pass + Id + new DateTime().Year + Email);
 
+        [NotMapped]
         public Dictionary<string, string> Labels => new Dictionary<string, string>
         {
             {"Email", "E-mail"},

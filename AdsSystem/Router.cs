@@ -5,25 +5,23 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using AdsSystem.Controllers;
 using Microsoft.AspNetCore.Http;
 using HeyRed.Mime; 
 
 namespace AdsSystem
 {
+    
     public class Router
     {
-        private static Dictionary<string, string> Routes = new Dictionary<string, string>()
+        private static RouterDictionary _routes = new RouterDictionary()
         {
             {@"GET ^\/$", "IndexController.Index"},
             {@"GET ^\/login$", "IndexController.Login"},
             {@"POST ^\/login$", "IndexController.LoginHandler"},
-            {@"GET ^\/users$", "UsersController.Index"},
-            {@"GET ^\/users/edit$", "UsersController.Edit"},
-            {@"POST ^\/users/edit$", "UsersController.Edit"},
-            {@"GET ^\/users/edit/([0-9]+)$", "UsersController.Edit"},
-            {@"POST ^\/users/edit/([0-9]+)$", "UsersController.Edit"},
-            {@"GET ^\/users/delete/([0-9]+)$", "UsersController.Delete"},
-        };
+        } + 
+             UsersController.GetRoutes() + 
+             ZonesController.GetRoutes();
 
         private static void _res(HttpResponse res, string body)
         {
@@ -72,7 +70,7 @@ namespace AdsSystem
                 res = (string) cls.GetMethod(action[1]).Invoke(controller, cls
                     .GetMethod(action[1])
                     .GetParameters()
-                    .Select((x, key) => parameters != null && key < parameters.Length && parameters[key] != null ? parameters[key] : Missing.Value)
+                    .Select((x, key) => key < parameters?.Length && parameters[key] != null ? parameters[key] : Missing.Value)
                     .ToArray());
             }
             response = (HttpResponse) resProp.GetValue(controller);
@@ -88,7 +86,7 @@ namespace AdsSystem
                 string selectedAction = null;
                 string[] parameters = null;
 
-                foreach (var route in Routes)
+                foreach (var route in _routes)
                 {
                     var key = route.Key.Split(' ');
                     var httpMethod = key[0];

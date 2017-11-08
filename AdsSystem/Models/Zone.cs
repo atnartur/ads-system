@@ -15,7 +15,8 @@ namespace AdsSystem.Models
        
         public int Width { get; set; }
         public int Height { get; set; }
-
+        
+        [NotMapped]
         public Dictionary<string, string> Labels => new Dictionary<string, string>
         {
             {"Name", "Название"},

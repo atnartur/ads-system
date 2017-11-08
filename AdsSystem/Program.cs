@@ -17,6 +17,7 @@ namespace AdsSystem
         
         public static void Main(string[] args)
         {
+            Console.WriteLine(User.PassHash("1234"));
             using (var instance = Db.Instance)
                 instance.Database.Migrate();
             

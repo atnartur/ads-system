@@ -10,11 +10,25 @@ namespace AdsSystem.Controllers
     public abstract class CrudController<T> : ControllerBase where T : class, IModel, new()
     {
         protected abstract string Title { get; }
-        private string ViewBase => GetType().Name.Replace("Controller", "");
+        protected abstract string ViewBase { get; }
         protected abstract Func<Db, DbSet<T>> DbSet { get; }
         protected abstract string[] RequiredFields { get; } 
 
         protected abstract void Save(T model, HttpRequest request);
+
+        protected static RouterDictionary GetRoutes(string viewBase)
+        {
+            var url = viewBase.ToLower();
+            return new RouterDictionary()
+            {
+                {@"GET ^\/" + url + "$", viewBase + "Controller.Index"},
+                {@"GET ^\/" + url + "/edit$", viewBase + "Controller.Edit"},
+                {@"POST ^\/" + url + "/edit$", viewBase + "Controller.Edit"},
+                {@"GET ^\/" + url + "/edit/([0-9]+)$", viewBase + "Controller.Edit"},
+                {@"POST ^\/" + url + "/edit/([0-9]+)$", viewBase + "Controller.Edit"},
+                {@"GET ^\/" + url + "/delete/([0-9]+)$", viewBase + "Controller.Delete"},
+            };
+        }
         
         public string Index()
         {
@@ -23,7 +37,7 @@ namespace AdsSystem.Controllers
                 var vars = new Dictionary<string, object>()
                 {
                     {"title", Title},
-                    {"list", db.Users.Cast<T>()}
+                    {"list", DbSet(db).Cast<T>()}
                 };    
                 return View(ViewBase + "/Index", vars);
             }
@@ -60,7 +74,7 @@ namespace AdsSystem.Controllers
                         else
                             db.Update(item);
                         db.SaveChanges();
-                        return Redirect("/" + ViewBase);
+                        return Redirect("/" + ViewBase.ToLower());
                     }
                 }
                 vars.Add("info", item);
@@ -81,7 +95,7 @@ namespace AdsSystem.Controllers
                     db.SaveChanges();
                 }
             }
-            return Redirect("/" + ViewBase);
+            return Redirect("/" + ViewBase.ToLower());
         }
     }
 }
