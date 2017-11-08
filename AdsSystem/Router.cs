@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -67,12 +66,14 @@ namespace AdsSystem
             var beforeActionMethod = cls.GetMethod("BeforeAction");
             if (beforeActionMethod != null)
                 isNeedInvokeAction = (bool) beforeActionMethod.Invoke(controller, new [] { request.Method, action[0], action[1] });
-            
+
             if (isNeedInvokeAction)
             {
-                parameters = parameters ?? new object[] { };
-                var method = cls.GetMethod(action[1], Enumerable.Repeat(typeof(string), parameters.Length).ToArray()); 
-                res = (string) method.Invoke(controller, parameters);
+                res = (string) cls.GetMethod(action[1]).Invoke(controller, cls
+                    .GetMethod(action[1])
+                    .GetParameters()
+                    .Select((x, key) => parameters != null && key < parameters.Length && parameters[key] != null ? parameters[key] : Missing.Value)
+                    .ToArray());
             }
             response = (HttpResponse) resProp.GetValue(controller);
 
