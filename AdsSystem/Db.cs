@@ -23,6 +23,7 @@ namespace AdsSystem
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Zone> Zones { get; set; }
         
         public Db CreateDbContext(string[] args) => Instance;
     }

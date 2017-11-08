@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AdsSystem.Models
 {
-    public class User
+    public class User : IModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -42,7 +42,7 @@ namespace AdsSystem.Models
         /// <returns></returns>
         public string Token() => PassHash(Pass + Id + new DateTime().Year + Email);
 
-        public Dictionary<string, string> Labels = new Dictionary<string, string>
+        public Dictionary<string, string> Labels => new Dictionary<string, string>
         {
             {"Email", "E-mail"},
             {"Name", "Имя"},

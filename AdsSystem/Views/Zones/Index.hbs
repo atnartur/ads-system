@@ -1,0 +1,32 @@
+<a class="btn btn-success btn-block btn-lg" href="/zones/edit"><i class="fa fa-plus"></i> Добавить</a>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Размеры</th>
+        <th width="150">Функции</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each list}}
+        <tr>
+            <td>{{Id}}</td>
+            <td>{{Name}}</td>
+            <td>{{Width}}x{{Height}}</td>
+            <td>
+                <a class="btn btn-primary" href="/zones/edit/{{id}}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <a
+                        class="btn btn-danger"
+                        onclick="return confirm('Вы действительно хотите удалить зону?');"
+                        href="/zones/delete/{{id}}"
+                >
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
