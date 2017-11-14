@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace AdsSystem.Migrations
 {
-    public partial class Zone : Migration
+    public partial class Banners : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Banner",
+                name: "Banners",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -32,43 +32,25 @@ namespace AdsSystem.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Banner", x => x.Id);
+                    table.PrimaryKey("PK_Banners", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Banner_Users_AuthorId",
+                        name: "FK_Banners_Users_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Zones",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Height = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true),
-                    Width = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Zones", x => x.Id);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_Banner_AuthorId",
-                table: "Banner",
+                name: "IX_Banners_AuthorId",
+                table: "Banners",
                 column: "AuthorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Banner");
-
-            migrationBuilder.DropTable(
-                name: "Zones");
+                name: "Banners");
         }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdsSystem.Models
 {
-    public class Banner
+    public class Banner : IModel
     {
         public enum BannerType
         {
@@ -50,6 +50,17 @@ namespace AdsSystem.Models
             {"Name", "Название"},
             {"Width", "Ширина"},
             {"Height", "Высота"},
+            {"Link", "Ссылка"},
+            {"Priority", "Приоритет"},
+            {"Type", "Тип"},
+            {"Html", "HTML-код"},
+            {"ImageFormat", "Картинка"},
+            {"MaxImpressions", "Максимальное количество просмотров"},
+            {"StartTime", "Время начала показа"},
+            {"EndTime", "Время окончания показа"},
+            {"IsActive", "Активен"},
+            {"IsArchived", "Архивирован"},
+            {"Author", "Загрузил баннер"}
         };
     }
 }

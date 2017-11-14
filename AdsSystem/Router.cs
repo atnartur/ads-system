@@ -21,7 +21,8 @@ namespace AdsSystem
             {@"POST ^\/login$", "IndexController.LoginHandler"},
         } + 
              UsersController.GetRoutes() + 
-             ZonesController.GetRoutes();
+             ZonesController.GetRoutes(); // +
+//             BannersController.GetRoutes();
 
         private static void _res(HttpResponse res, string body)
         {
