@@ -18,8 +18,6 @@ namespace AdsSystem.Controllers
         protected override void Save(Banner model, Db db, HttpRequest request)
         {
             model.Name = Request.Form["Name"][0];
-            model.Width = int.Parse(Request.Form["Width"][0]);
-            model.Height = int.Parse(Request.Form["Height"][0]);
             model.Link = Request.Form["Link"][0];
             model.Priority = int.Parse(Request.Form["Priority"][0]);
             model.Html = Request.Form["Html"][0];

@@ -16,9 +16,6 @@ namespace AdsSystem.Models
         
         [StringLength(255)]
         public string Name { get; set; }
-       
-        public int Width { get; set; }
-        public int Height { get; set; }
         
         [StringLength(255)]
         public string Link { get; set; }
