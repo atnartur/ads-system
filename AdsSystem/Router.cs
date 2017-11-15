@@ -21,8 +21,8 @@ namespace AdsSystem
             {@"POST ^\/login$", "IndexController.LoginHandler"},
         } + 
              UsersController.GetRoutes() + 
-             ZonesController.GetRoutes(); // +
-//             BannersController.GetRoutes();
+             ZonesController.GetRoutes() +
+             BannersController.GetRoutes();
 
         private static void _res(HttpResponse res, string body)
         {
@@ -97,7 +97,7 @@ namespace AdsSystem
 
                     var r = Regex.Matches(url, key[1]);
                     var check = r.Count > 0;
-                    Console.WriteLine(check + " " + url);
+                    
                     if (check)
                     {
                         selectedAction = route.Value;
@@ -120,16 +120,21 @@ namespace AdsSystem
                     {
                         selectedAction = "static";
                         
-                        string mime = MimeTypesMap.GetMimeType(Path.GetFileName(url));
+                        string mime;
+                        if (url.Contains("jpg"))
+                            mime = "image/jpeg";
+                        else 
+                            mime = MimeTypesMap.GetMimeType(Path.GetFileName(url));
+                        
                         response.Headers["Content-Type"] = mime;
                         
-                        using (var sr = new StreamReader(staticFilePath))
+                        FileInfo fInfo = new FileInfo(staticFilePath);
+                        long numBytes = fInfo.Length;
+                        
+                        using (var br = new BinaryReader(new FileStream(staticFilePath, FileMode.Open, FileAccess.Read)))
                         {
-                            while (!sr.EndOfStream)
-                            {
-                                byte[] buffer = Encoding.UTF8.GetBytes(sr.ReadLine() + "\n");
-                                response.Body.Write(buffer, 0, buffer.Length);
-                            }
+                            byte[] bOutput = br.ReadBytes((int)numBytes);   
+                            response.Body.Write(bOutput, 0, bOutput.Length);   
                         }
                         response.Body.Close();
                     }

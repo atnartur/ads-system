@@ -11,7 +11,7 @@ namespace AdsSystem.Controllers
         protected override string ViewBase => "Users";
         protected override Func<Db, DbSet<User>> DbSet => db => db.Users;
         protected override string[] RequiredFields => new[] {"Email", "Name"}; 
-        protected override void Save(User model, HttpRequest request)
+        protected override void Save(User model, Db db, HttpRequest request)
         {
             model.Email = Request.Form["Email"][0];
             model.Name = Request.Form["Name"][0];

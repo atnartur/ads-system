@@ -11,7 +11,7 @@ namespace AdsSystem.Controllers
         protected override string ViewBase => "Zones";
         protected override Func<Db, DbSet<Zone>> DbSet => db => db.Zones;
         protected override string[] RequiredFields => new[] {"Name", "Width", "Height"};
-        protected override void Save(Zone model, HttpRequest request)
+        protected override void Save(Zone model, Db db, HttpRequest request)
         {
             model.Name = request.Form["Name"][0];
             model.Width = int.Parse(request.Form["Width"][0]);

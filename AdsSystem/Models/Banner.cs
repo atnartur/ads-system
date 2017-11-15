@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdsSystem.Models
 {
-    public class Banner : IModel
+    public class Banner : IModel, IModelWithId
     {
         public enum BannerType
         {
