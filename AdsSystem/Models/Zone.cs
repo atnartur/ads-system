@@ -17,6 +17,8 @@ namespace AdsSystem.Models
         public int Height { get; set; }
         
         public List<BannersZones> BannersZones { get; set; }
+
+        public string GetLink() => "/api/zone/" + Id;
         
         [NotMapped]
         public Dictionary<string, string> Labels => new Dictionary<string, string>

@@ -15,6 +15,21 @@ namespace AdsSystem.Controllers
         protected override Func<Db, DbSet<Banner>> DbSet => db => db.Banners;
         protected override string[] RequiredFields => new[] {"Name", "Width", "Height", "Type", "Author"};
         public static RouterDictionary GetRoutes() => GetRoutes("Banners");
+        
+        public override string Index()
+        {
+            using (var db = Db.Instance)
+            {
+                Vars.Add("list", DbSet(db).Cast<Banner>().Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    Zones = x.BannersZones.Select(y => new {Id = y.ZoneId, y.Zone.Name}).ToList()
+                }));
+                return View(ViewBase + "/Index", Vars);
+            }
+        }
+        
         protected override void Save(Banner model, Db db, HttpRequest request)
         {
             model.Name = Request.Form["Name"][0];

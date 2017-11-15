@@ -36,11 +36,11 @@ namespace AdsSystem.Controllers
             Vars["title"] = Title;
         }
         
-        public string Index()
+        public virtual string Index()
         {
             using (var db = Db.Instance)
             {
-                Vars.Add("list", DbSet(db).Cast<T>());    
+                Vars.Add("list", DbSet(db).Cast<T>());
                 return View(ViewBase + "/Index", Vars);
             }
         }

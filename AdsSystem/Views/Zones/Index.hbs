@@ -5,6 +5,7 @@
         <th>ID</th>
         <th>Название</th>
         <th>Размеры</th>
+        <th>Ссылка</th>
         <th width="150">Функции</th>
     </tr>
     </thead>
@@ -14,6 +15,9 @@
             <td>{{Id}}</td>
             <td>{{Name}}</td>
             <td>{{Width}}x{{Height}}</td>
+            <td>
+                <input type="text" value="{{Link}}" class="form-control">
+            </td>
             <td>
                 <a class="btn btn-primary" href="/zones/edit/{{id}}">
                     <i class="fa fa-edit"></i>

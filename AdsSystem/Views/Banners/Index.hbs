@@ -4,6 +4,7 @@
     <tr>
         <th>ID</th>
         <th>Название</th>
+        <th>Зоны</th>
         <th width="150">Функции</th>
     </tr>
     </thead>
@@ -12,6 +13,11 @@
         <tr>
             <td>{{Id}}</td>
             <td>{{Name}}</td>
+            <td>
+                {{#each Zones}}
+                    <a href="/zones/edit/{{Id}}" target="_blank">{{Name}}</a>
+                {{/each}}
+            </td>
             <td>
                 <a class="btn btn-primary" href="/banners/edit/{{id}}">
                     <i class="fa fa-edit"></i>
