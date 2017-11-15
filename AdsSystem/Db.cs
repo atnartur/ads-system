@@ -26,6 +26,7 @@ namespace AdsSystem
         public DbSet<Zone> Zones { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<BannersZones> BannersZones { get; set; }
+        public DbSet<Models.View> Views { get; set; }
         
         public Db CreateDbContext(string[] args) => Instance;
         
