@@ -69,6 +69,14 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-md-2">Зоны ротации</label>
+        <div class="col-md-6">
+            {{#each zones}}
+                <input type="checkbox" name="zones[{{id}}]" {{#if IsEnabled}}checked{{/if}}> {{Name}} <small>({{Width}}x{{Height}})</small> <br>
+            {{/each}}
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-md-6 col-md-offset-2">
             <label><input type="checkbox" name="IsActive" checked> Активен</label> <br>
             <label><input type="checkbox" name="IsArchive"> Архивирован</label>

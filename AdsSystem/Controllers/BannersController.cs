@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AdsSystem.Libs;
 using AdsSystem.Models;
 using Microsoft.AspNetCore.Http;
@@ -9,10 +10,6 @@ namespace AdsSystem.Controllers
 {
     public class BannersController : CrudController<Banner>
     {
-        public BannersController() : base()
-        {
-            Vars.Add("types", Enum.GetNames(typeof(Banner.BannerType)));
-        }
         protected override string Title => "Баннеры";
         protected override string ViewBase => "Banners";
         protected override Func<Db, DbSet<Banner>> DbSet => db => db.Banners;
@@ -49,10 +46,50 @@ namespace AdsSystem.Controllers
                 model.ImageFormat = FileStorage.PutFile(request.Form.Files["Image"], model);
         }
 
+        protected override void AfterSaveHook(Banner model, Db db, HttpRequest request)
+        {
+            var havingZones = db.BannersZones.Where(x => x.BannerId == model.Id).Select(x => x.ZoneId).ToList();
+
+            var zonesFromUser = request.Form
+                .Where(x => x.Key.StartsWith("zones"))
+                .Select(x => int.Parse(x.Key.Replace("zones", "").TrimStart('[').TrimEnd(']')))
+                .ToList();
+            
+            // те зоны, которые пользователь вычеркнул - удаляем
+            foreach (var id in havingZones.Where(x => !zonesFromUser.Contains(x)))
+                db.Remove(db.BannersZones.Find(model.Id, id));
+
+            db.SaveChanges();
+            
+            // те зоны, которые пользователь добавил - добавляем
+            foreach (var id in zonesFromUser.Where(x => !havingZones.Contains(x)))
+                db.Add(new BannersZones {BannerId = model.Id, ZoneId = id});
+            
+            db.SaveChanges();
+        }
+
         protected override void PreEditHook(Banner model, ref Dictionary<string, object> vars)
         {
+            Vars.Add("types", Enum.GetNames(typeof(Banner.BannerType)));
             if (model.ImageFormat != null)
                 vars["ImageLink"] = "/" + FileStorage.GetLink(model, model.ImageFormat);
+
+            using (var db = Db.Instance)
+            {
+                var havingZones = new List<int>();
+                
+                if (model.Id != null)
+                    havingZones = db.BannersZones.Where(x => x.BannerId == model.Id).Select(x => x.ZoneId).ToList();
+                
+                Vars.Add("zones", db.Zones.Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    x.Width,
+                    x.Height,
+                    IsEnabled = havingZones.Contains(x.Id)
+                }).ToList());
+            }
         }
     }
 }

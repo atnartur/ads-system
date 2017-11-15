@@ -43,6 +43,8 @@ namespace AdsSystem.Models
         public bool IsArchived { get; set; }
         
         public User Author { get; set; }
+        
+        public List<BannersZones> BannersZones {get; set; }
 
         [NotMapped]
         public Dictionary<string, string> Labels => new Dictionary<string, string>

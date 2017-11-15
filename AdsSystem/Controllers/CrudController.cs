@@ -46,6 +46,7 @@ namespace AdsSystem.Controllers
         }
 
         protected virtual void PreEditHook(T model, ref Dictionary<string, object> vars) {}
+        protected virtual void AfterSaveHook(T model, Db db, HttpRequest request) {}
 
         public string Edit(string id = null)
         {
@@ -78,6 +79,9 @@ namespace AdsSystem.Controllers
                         else
                             db.Update(item);
                         db.SaveChanges();
+                        
+                        AfterSaveHook(item, db, Request);
+                        
                         return Redirect("/" + ViewBase.ToLower());
                     }
                 }
