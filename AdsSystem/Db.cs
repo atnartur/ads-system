@@ -25,7 +25,14 @@ namespace AdsSystem
         public DbSet<User> Users { get; set; }
         public DbSet<Zone> Zones { get; set; }
         public DbSet<Banner> Banners { get; set; }
+        public DbSet<BannersZones> BannersZones { get; set; }
         
         public Db CreateDbContext(string[] args) => Instance;
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BannersZones>()
+                .HasKey(c => new { c.BannerId, c.ZoneId });
+        }
     }
 }
