@@ -17,6 +17,8 @@ namespace AdsSystem.Models
         [StringLength(255)]
         public string UserAgent { get; set; }
 
+        public bool IsClicked { get; set; } = false;
+
         public Dictionary<string, string> Labels => new Dictionary<string, string>();
     }
 }

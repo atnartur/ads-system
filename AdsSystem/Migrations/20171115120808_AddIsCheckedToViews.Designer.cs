@@ -12,9 +12,10 @@ using System;
 namespace AdsSystem.Migrations
 {
     [DbContext(typeof(Db))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20171115120808_AddIsCheckedToViews")]
+    partial class AddIsCheckedToViews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
