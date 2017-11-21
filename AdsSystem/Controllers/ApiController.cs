@@ -25,9 +25,7 @@ namespace AdsSystem.Controllers
                     return "";
                 }
                 
-                var r = new Random();
-                var index = r.Next(0, count);
-                var res = where.Skip(index).First();
+                var res = where.Skip(new Random().Next(count)).First();
                 
                 if (res == null)
                     return "";
@@ -68,12 +66,12 @@ namespace AdsSystem.Controllers
             int.TryParse(viewId, out id);
             using (var db = Db.Instance)
             {
-                var view = db.Views.Find(id);
+                var view = db.Views.Where(x => x.Id == id ).Include(x => x.Banner).FirstOrDefault();
                 view.IsClicked = true;
                 db.Attach(view);
                 db.SaveChanges();
                 
-                Response.StatusCode = 202;
+                Response.Redirect(view.Banner.Link);
                 return "";
             }
         }
