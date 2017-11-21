@@ -54,13 +54,13 @@ namespace AdsSystem.Controllers
             Banner.BannerType type;
             Enum.TryParse(Request.Form["Type"][0], out type);
             model.Type = type;
-            
-            if (request.Form.Files.Count > 0 && request.Form.Files["Image"] != null)
-                model.ImageFormat = FileStorage.PutFile(request.Form.Files["Image"], model);
         }
 
         protected override void AfterSaveHook(Banner model, Db db, HttpRequest request)
         {
+            if (request.Form.Files.Count > 0 && request.Form.Files["Image"] != null)
+                model.ImageFormat = FileStorage.PutFile(request.Form.Files["Image"], model);
+            
             var havingZones = db.BannersZones.Where(x => x.BannerId == model.Id).Select(x => x.ZoneId).ToList();
 
             var zonesFromUser = request.Form

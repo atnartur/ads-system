@@ -22,7 +22,7 @@ namespace AdsSystem.Controllers
                     x.Name,
                     x.Width,
                     x.Height,
-                    Link = Request.Protocol + Request.Host + x.GetLink()
+                    Link = "http://" + Request.Host + x.GetLink()
                 }));
                 return View(ViewBase + "/Index", Vars);
             }
