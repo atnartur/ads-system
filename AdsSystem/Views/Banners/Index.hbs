@@ -5,6 +5,8 @@
         <th>ID</th>
         <th>Название</th>
         <th>Зоны</th>
+        <th>Кол-во показов</th>
+        <th>Кол-во кликов</th>
         <th width="150">Функции</th>
     </tr>
     </thead>
@@ -18,6 +20,8 @@
                     <a href="/zones/edit/{{Id}}" target="_blank">{{Name}}</a>
                 {{/each}}
             </td>
+            <td>{{ViewsCount}}</td>
+            <td>{{ClicksCount}}</td>
             <td>
                 <a class="btn btn-primary" href="/banners/edit/{{id}}">
                     <i class="fa fa-edit"></i>

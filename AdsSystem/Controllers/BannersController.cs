@@ -24,7 +24,9 @@ namespace AdsSystem.Controllers
                 {
                     x.Id,
                     x.Name,
-                    Zones = x.BannersZones.Select(y => new {Id = y.ZoneId, y.Zone.Name}).ToList()
+                    Zones = x.BannersZones.Select(y => new {Id = y.ZoneId, y.Zone.Name}).ToList(),
+                    ViewsCount = x.Views.Count(),
+                    ClicksCount = x.Views.Count(y => y.IsClicked)
                 }));
                 return View(ViewBase + "/Index", Vars);
             }

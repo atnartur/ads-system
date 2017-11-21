@@ -42,6 +42,7 @@ namespace AdsSystem.Models
         public User Author { get; set; }
         
         public List<BannersZones> BannersZones {get; set; }
+        public List<View> Views {get; set; }
 
         [NotMapped]
         public Dictionary<string, string> Labels => new Dictionary<string, string>
