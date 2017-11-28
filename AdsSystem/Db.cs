@@ -1,4 +1,5 @@
-﻿using AdsSystem.Models;
+﻿using System;
+using AdsSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,13 @@ namespace AdsSystem
             get
             {
                 var optionsBuilder = new DbContextOptionsBuilder<Db>();
-                optionsBuilder.UseMySql("server=127.0.0.1;uid=ads;pwd=ads;database=ads");
+                
+                var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "127.0.0.1";
+                var user = Environment.GetEnvironmentVariable("DB_USER") ?? "ads";
+                var pass = Environment.GetEnvironmentVariable("DB_PASS") ?? "ads";
+                var name = Environment.GetEnvironmentVariable("DB_NAME") ?? "ads";
+                
+                optionsBuilder.UseMySql("server=" + host + ";uid=" +user + ";pwd=" + pass + ";database=" + name);
                 optionsBuilder.UseLoggerFactory(MyLoggerFactory);
                 return new Db(optionsBuilder.Options);
             }
