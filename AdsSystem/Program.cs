@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using AdsSystem.Models;
-using HandlebarsDotNet;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
