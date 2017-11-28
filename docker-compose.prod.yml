@@ -5,8 +5,13 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    environment:
+      DB_HOST: db
     ports:
       - 80:8081
+    depends_on:
+      - db
+    restart: always
   
   db:
     image: percona:5.7.18
@@ -21,6 +26,8 @@ services:
     volumes:
       - ./docker/mysql.cnf:/etc/mysql/conf.d/extra.cnf
       - db:/var/lib/mysql
+    restart: always
+
   pma:
     image: phpmyadmin/phpmyadmin
     depends_on:
@@ -29,6 +36,7 @@ services:
       - ./docker/pma_config.php:/www/config.user.inc.php
     ports:
       - 8082:80
+    restart: always
 
 volumes:
   db:
