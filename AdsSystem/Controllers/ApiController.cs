@@ -32,14 +32,16 @@ namespace AdsSystem.Controllers
                 
                 var banner = db.Banners.Find(res.BannerId);
                 var zone = db.Zones.Find(res.ZoneId);
-                Console.WriteLine(zone.Id);
-                Console.WriteLine(banner.Id);
+                
                 var view = new Models.View();
+                
                 db.Entry(banner).State = EntityState.Unchanged;
                 db.Entry(zone).State = EntityState.Unchanged;
+                
                 view.Banner = banner;
                 view.Zone = zone;
                 view.UserAgent = Request.Headers["User-Agent"];
+                
                 db.Add(view);
                 db.SaveChanges();
                 

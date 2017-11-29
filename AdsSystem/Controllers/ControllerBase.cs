@@ -49,7 +49,6 @@ namespace AdsSystem.Controllers
         public string View(string name, Dictionary<string, object> vars)
         {
             return new View(name, vars).ToString();
-        
         }
     }
 }
