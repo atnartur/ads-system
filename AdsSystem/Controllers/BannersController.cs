@@ -5,6 +5,7 @@ using AdsSystem.Libs;
 using AdsSystem.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AdsSystem.Controllers
 {
@@ -20,14 +21,25 @@ namespace AdsSystem.Controllers
         {
             using (var db = Db.Instance)
             {
-                Vars.Add("list", DbSet(db).Cast<Banner>().Select(x => new
+                if (Request.Headers["X-Requested-With"].Count > 0 && 
+                    Request.Headers["X-Requested-With"][0] == "XMLHttpRequest")
                 {
-                    x.Id,
-                    x.Name,
-                    Zones = x.BannersZones.Select(y => new {Id = y.ZoneId, y.Zone.Name}).ToList(),
-                    ViewsCount = x.Views.Count(),
-                    ClicksCount = x.Views.Count(y => y.IsClicked)
-                }));
+                    Response.Headers["Content-type"] = "application/json; charset=utf-8";
+                    var res = DbSet(db).Cast<Banner>().Select(x => new
+                    {
+                        x.Id,
+                        x.Name,
+                        Zones = x.BannersZones.Select(y => new {Id = y.ZoneId, y.Zone.Name}).ToList(),
+                        ViewsCount = x.Views.Count(),
+                        ClicksCount = x.Views.Count(y => y.IsClicked)
+                    });
+                    return JsonConvert.SerializeObject(res);
+                }
+                else
+                {
+                    Vars.Add("Zones", db.Zones.ToArray());
+                }
+                
                 return View(ViewBase + "/Index", Vars);
             }
         }

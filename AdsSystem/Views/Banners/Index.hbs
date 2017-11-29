@@ -1,4 +1,17 @@
 <a class="btn btn-success btn-block btn-lg" href="/banners/edit"><i class="fa fa-plus"></i> Добавить</a>
+<div class="row" style="margin-top: 10px">
+    <div class="col-md-6">
+        <input type="text" class="form-control pull-right" id="search" placeholder="Поиск...">
+    </div>
+    <div class="col-md-6">
+        <select name="zones" id="zones" class="form-control">
+            <option value="">Все зоны</option>
+            {{#each Zones}}
+                <option value="{{Id}}">{{Name}}</option>
+            {{/each}}
+        </select>
+    </div>
+</div>
 <table class="table table-striped table-hover">
     <thead>
     <tr>
@@ -10,31 +23,33 @@
         <th width="150">Функции</th>
     </tr>
     </thead>
-    <tbody>
-    {{#each list}}
+    <tbody id="list">
         <tr>
-            <td>{{Id}}</td>
-            <td>{{Name}}</td>
-            <td>
-                {{#each Zones}}
-                    <a href="/zones/edit/{{Id}}" target="_blank">{{Name}}</a>
-                {{/each}}
-            </td>
-            <td>{{ViewsCount}}</td>
-            <td>{{ClicksCount}}</td>
-            <td>
-                <a class="btn btn-primary" href="/banners/edit/{{id}}">
-                    <i class="fa fa-edit"></i>
-                </a>
-                <a
-                        class="btn btn-danger"
-                        onclick="return confirm('Вы действительно хотите удалить баннер?');"
-                        href="/banners/delete/{{id}}"
-                >
-                    <i class="fa fa-trash-o"></i>
-                </a>
-            </td>
+            <td colspan="6" style="text-align: center;">Загрузка...</td>
         </tr>
-    {{/each}}
     </tbody>
 </table>
+
+<script id="template" type="text/template">
+    <tr>
+        <td class="Id"></td>
+        <td class="Name"></td>
+        <td class="Zones"></td>
+        <td class="ViewsCount"></td>
+        <td class="ClicksCount"></td>
+        <td>
+            <a class="btn btn-primary editLink" href="/banners/edit/">
+                <i class="fa fa-edit"></i>
+            </a>
+            <a
+                    class="btn btn-danger deleteLink"
+                    onclick="return confirm('Вы действительно хотите удалить баннер?');"
+                    href="/banners/delete/"
+            >
+                <i class="fa fa-trash-o"></i>
+            </a>
+        </td>
+    </tr>
+</script>
+
+<script src="/js/admin/banners/index.js"></script>
