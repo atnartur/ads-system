@@ -25,7 +25,25 @@ namespace AdsSystem.Controllers
                     Request.Headers["X-Requested-With"][0] == "XMLHttpRequest")
                 {
                     Response.Headers["Content-type"] = "application/json; charset=utf-8";
-                    var res = DbSet(db).Cast<Banner>().Select(x => new
+                    var query = DbSet(db).Cast<Banner>();
+
+                    if (Request.Query["zoneId"].Count > 0)
+                    {
+                        try
+                        {
+                            var zoneId = int.Parse(Request.Query["ZoneId"][0]);
+                            query = db.BannersZones.Where(x => x.ZoneId == zoneId).Select(x => x.Banner);
+                        }
+                        catch(FormatException) {}
+                    }
+                    
+                    if (Request.Query["search"].Count > 0)
+                    {
+                        var search = Request.Query["search"][0];
+                        query = query.Where(x => x.Name.ToLower().Contains(search.ToLower()));
+                    }
+
+                    var res = query.Select(x => new
                     {
                         x.Id,
                         x.Name,

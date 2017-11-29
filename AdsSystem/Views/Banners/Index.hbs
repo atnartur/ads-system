@@ -1,10 +1,10 @@
 <a class="btn btn-success btn-block btn-lg" href="/banners/edit"><i class="fa fa-plus"></i> Добавить</a>
 <div class="row" style="margin-top: 10px">
     <div class="col-md-6">
-        <input type="text" class="form-control pull-right" id="search" placeholder="Поиск...">
+        <input type="text" class="form-control pull-right filter" id="search" placeholder="Поиск...">
     </div>
     <div class="col-md-6">
-        <select name="zones" id="zones" class="form-control">
+        <select id="zoneId" class="form-control filter">
             <option value="">Все зоны</option>
             {{#each Zones}}
                 <option value="{{Id}}">{{Name}}</option>
@@ -51,5 +51,11 @@
         </td>
     </tr>
 </script>
-
+<link rel="stylesheet" href="/node_modules/nprogress/nprogress.css">
+<style>
+    #nprogress .bar {
+        background: #fff;
+    }
+</style>
+<script src="/node_modules/nprogress/nprogress.js"></script>
 <script src="/js/admin/banners/index.js"></script>
