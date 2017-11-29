@@ -50,6 +50,12 @@ namespace AdsSystem.Libs
                 var res = db.Users.Find(id);
                 return res == null || res.Token() != token ? null : res;
             }
-        } 
+        }
+
+        public static void Logout(HttpResponse response)
+        {
+            response.Cookies.Delete("uid");
+            response.Cookies.Delete("token");
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace AdsSystem
             {@"GET ^\/$", "IndexController.Index"},
             {@"GET ^\/login$", "IndexController.Login"},
             {@"POST ^\/login$", "IndexController.LoginHandler"},
+            {@"GET ^\/logout$", "IndexController.Logout"},
             {@"GET ^\/api/zone/([0-9]+)", "ApiController.Get"},
             {@"GET ^\/api/click/([0-9]+)", "ApiController.Click"},
         } + 

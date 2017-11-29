@@ -40,5 +40,12 @@ namespace AdsSystem.Controllers
             }
             return new View("Login", _loginViewParams).ToString();
         }
+
+        public string Logout()
+        {
+            Auth.Logout(Response);
+            Response.Redirect("/");
+            return "";
+        }
     }
 }
