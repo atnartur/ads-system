@@ -40,7 +40,7 @@ function filtersInit() {
         timeout = setTimeout(() => {
             params[$(this).attr('id')] = $(this).val();
             load()
-        }, 500);
+        }, this.tagName === 'SELECT' ? 0 : 500);
     });
 }
 
