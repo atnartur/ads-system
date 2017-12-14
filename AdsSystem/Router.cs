@@ -126,6 +126,8 @@ namespace AdsSystem
                         string mime;
                         if (url.Contains("jpg"))
                             mime = "image/jpeg";
+                        else if (url.Contains("js"))
+                            mime = "text/javascript";
                         else 
                             mime = MimeTypesMap.GetMimeType(Path.GetFileName(url));
                         
