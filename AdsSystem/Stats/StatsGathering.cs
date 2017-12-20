@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Linq;
 using AdsSystem.Models;
 using Microsoft.EntityFrameworkCore;
@@ -9,16 +8,21 @@ namespace AdsSystem.Stats
 {
     public class StatsGathering
     {
-        private Db db = Db.Instance;
-
         public void Run()
         {
-            BannerStat();
-            DayStat();
+            var sw = new Stopwatch();
+            Console.WriteLine("Stat gathering - " + DateTime.Now);
+            using (var db = Db.Instance)
+            {
+                BannerStat(db);
+                DayStat(db);
+            }
+            Console.WriteLine("Stat gathering finished on " + sw.Elapsed.TotalSeconds + " minutes");
         }
 
-        void BannerStat()
+        void BannerStat(Db db)
         {
+            Console.WriteLine("Stat gathering: banners");
             db.Banners.ToList().ForEach(x =>
             {
                 x.ViewsCount = x.Views.Count;
@@ -28,8 +32,9 @@ namespace AdsSystem.Stats
             db.SaveChanges();
         }
 
-        void DayStat()
+        void DayStat(Db db)
         {
+            Console.WriteLine("Stat gathering: days");
             var count = db.DayStats.Count();
             if (count != 0 && db.DayStats.Last().Date == DateTime.Now.Date)
             {
