@@ -5,6 +5,7 @@ const params = {
 
 let timeout;
 
+
 function load() {
     NProgress.start();
     $.get('?', params).then(res => {

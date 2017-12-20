@@ -12,9 +12,10 @@ using System;
 namespace AdsSystem.Migrations
 {
     [DbContext(typeof(Db))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20171214103258_BannersStats")]
+    partial class BannersStats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,27 +78,6 @@ namespace AdsSystem.Migrations
                     b.HasIndex("ZoneId");
 
                     b.ToTable("BannersZones");
-                });
-
-            modelBuilder.Entity("AdsSystem.Models.DayStats", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("BannerId");
-
-                    b.Property<int>("ClicksCount");
-
-                    b.Property<decimal>("Ctr");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<int>("ViewsCount");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DayStats");
                 });
 
             modelBuilder.Entity("AdsSystem.Models.User", b =>
