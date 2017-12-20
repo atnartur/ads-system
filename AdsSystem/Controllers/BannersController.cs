@@ -47,16 +47,14 @@ namespace AdsSystem.Controllers
                     {
                         x.Id,
                         x.Name,
-                        Zones = x.BannersZones.Select(y => new {Id = y.ZoneId, y.Zone.Name}).ToList(),
-                        ViewsCount = x.Views.Count(),
-                        ClicksCount = x.Views.Count(y => y.IsClicked)
+                        x.ClicksCount,
+                        x.ViewsCount,
+                        Zones = x.BannersZones.Select(y => new {Id = y.ZoneId, y.Zone.Name}).ToList()
                     });
                     return JsonConvert.SerializeObject(res);
                 }
                 else
-                {
                     Vars.Add("Zones", db.Zones.ToArray());
-                }
                 
                 return View(ViewBase + "/Index", Vars);
             }
