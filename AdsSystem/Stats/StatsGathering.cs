@@ -17,7 +17,7 @@ namespace AdsSystem.Stats
                 BannerStat(db);
                 DayStat(db);
             }
-            Console.WriteLine("Stat gathering finished on " + sw.Elapsed.TotalSeconds + " minutes");
+            Console.WriteLine("Stat gathering finished on " + sw.Elapsed.TotalSeconds + " seconds");
         }
 
         void BannerStat(Db db)
@@ -26,8 +26,10 @@ namespace AdsSystem.Stats
             db.Banners.ToList().ForEach(x =>
             {
                 x.ViewsCount = x.Views.Count;
-                x.ClicksCount = x.Views.Where(y => y.IsClicked).Count();
-                x.Ctr = x.ClicksCount / x.ViewsCount;
+                x.ClicksCount = x.Views.Count(y => y.IsClicked);
+                x.Ctr = x.ViewsCount > 0 ? x.ClicksCount / x.ViewsCount : 0;
+                db.Update(x);
+//                db.Entry(x).State = EntityState.Modified;
             });
             db.SaveChanges();
         }
@@ -55,7 +57,6 @@ namespace AdsSystem.Stats
                         lastDay.Ctr = x.list.Count(y => y.IsClicked == true) / x.list.Count;
                         db.Entry(lastDay).State = EntityState.Modified;
                     });
-
             }
             else
             {

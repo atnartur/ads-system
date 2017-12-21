@@ -48,7 +48,7 @@ namespace AdsSystem.Models
         public decimal Ctr { get; set; }
 
         public List<BannersZones> BannersZones { get; set; }
-        public List<View> Views { get; set; }
+        public List<View> Views { get; set; } = new List<View>();
 
         [NotMapped]
         public Dictionary<string, string> Labels => new Dictionary<string, string>
