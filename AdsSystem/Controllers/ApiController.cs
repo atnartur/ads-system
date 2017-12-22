@@ -18,36 +18,36 @@ namespace AdsSystem.Controllers
             {
                 var where = db.BannersZones.Where(x => x.ZoneId == id);
                 var count = where.Count();
-                
+
                 if (count == 0)
                 {
                     Response.StatusCode = 404;
                     return "";
                 }
-                
+
                 var res = where.Skip(new Random().Next(count)).First();
-                
+
                 if (res == null)
                     return "";
-                
+
                 var banner = db.Banners.Find(res.BannerId);
                 var zone = db.Zones.Find(res.ZoneId);
-                
+
                 var view = new Models.View();
-                
+
                 db.Entry(banner).State = EntityState.Unchanged;
                 db.Entry(zone).State = EntityState.Unchanged;
-                
-                view.Banner = banner;
+
+                view.BannerId = banner.Id;
                 view.Zone = zone;
                 view.UserAgent = Request.Headers["User-Agent"];
-                
+
                 db.Add(view);
                 db.SaveChanges();
-                
-                var linkBase = "http://" + Request.Host; 
+
+                var linkBase = "http://" + Request.Host;
                 var clickLink = linkBase + "/api/click/" + view.Id;
-                
+
                 Response.StatusCode = 200;
                 return View("ApiReturn", new Dictionary<string, object>
                 {
@@ -57,7 +57,7 @@ namespace AdsSystem.Controllers
                     {"ClickLink", clickLink},
                     {"Type", banner.Type},
                     {"Html", banner.Html},
-                    {"ImageLink", banner.ImageFormat != null ? (linkBase + "/" + FileStorage.GetLink(banner, banner.ImageFormat)) : ""}    
+                    {"ImageLink", banner.ImageFormat != null ? (linkBase + "/" + FileStorage.GetLink(banner, banner.ImageFormat)) : ""}
                 });
             }
         }
@@ -68,12 +68,15 @@ namespace AdsSystem.Controllers
             int.TryParse(viewId, out id);
             using (var db = Db.Instance)
             {
-                var view = db.Views.Where(x => x.Id == id ).Include(x => x.Banner).FirstOrDefault();
+                var view = db.Views
+                    .Where(x => x.Id == id)
+                    //.Include(x => x.Banner)
+                    .FirstOrDefault();
                 view.IsClicked = true;
                 db.Attach(view);
                 db.SaveChanges();
-                
-                Response.Redirect(view.Banner.Link);
+
+                Response.Redirect(db.Banners.FirstOrDefault(x => x.Id == view.BannerId).Link);
                 return "";
             }
         }

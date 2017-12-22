@@ -41,11 +41,11 @@ namespace AdsSystem.Models
 
         public User Author { get; set; }
 
-        public int ViewsCount { get; set; }
+        public double ViewsCount { get; set; }
 
-        public int ClicksCount { get; set; }
+        public double ClicksCount { get; set; }
 
-        public decimal Ctr { get; set; }
+        public double Ctr { get; set; }
 
         public List<BannersZones> BannersZones { get; set; }
         public List<View> Views { get; set; } = new List<View>();
