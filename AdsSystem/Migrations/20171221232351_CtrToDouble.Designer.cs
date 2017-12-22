@@ -12,9 +12,10 @@ using System;
 namespace AdsSystem.Migrations
 {
     [DbContext(typeof(Db))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20171221232351_CtrToDouble")]
+    partial class CtrToDouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +29,7 @@ namespace AdsSystem.Migrations
 
                     b.Property<int?>("AuthorId");
 
-                    b.Property<double>("ClicksCount");
+                    b.Property<int>("ClicksCount");
 
                     b.Property<double>("Ctr");
 
@@ -57,7 +58,7 @@ namespace AdsSystem.Migrations
 
                     b.Property<int>("Type");
 
-                    b.Property<double>("ViewsCount");
+                    b.Property<int>("ViewsCount");
 
                     b.HasKey("Id");
 
@@ -86,14 +87,14 @@ namespace AdsSystem.Migrations
 
                     b.Property<int>("BannerId");
 
-                    b.Property<double>("ClicksCount");
+                    b.Property<int>("ClicksCount");
 
                     b.Property<double>("Ctr");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
-                    b.Property<double>("ViewsCount");
+                    b.Property<int>("ViewsCount");
 
                     b.HasKey("Id");
 

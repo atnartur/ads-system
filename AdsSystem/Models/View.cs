@@ -12,7 +12,7 @@ namespace AdsSystem.Models
         public int Id { get; set; }
 
         public DateTime Time { get; set; } = DateTime.Now;
-        public Banner Banner { get; set; }
+        public int BannerId { get; set; }
         public Zone Zone { get; set; }
         [StringLength(255)]
         public string UserAgent { get; set; }

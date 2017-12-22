@@ -9,15 +9,15 @@ namespace AdsSystem.Models
     {
         public int Id { get; set; }
         public int BannerId { get; set; }
-        public int ViewsCount { get; set; }
-        public int ClicksCount { get; set; }
-        public decimal Ctr { get; set; }
+        public double ViewsCount { get; set; }
+        public double ClicksCount { get; set; }
+        public double Ctr { get; set; }
         [Column(TypeName = "date")]
         public DateTime Date { get; set; }
 
         public DayStats() { }
 
-        public DayStats(int bannerId, int viewsCount, int clicksCount, decimal ctr, DateTime date)
+        public DayStats(int bannerId, double viewsCount, double clicksCount, double ctr, DateTime date)
         {
             BannerId = bannerId;
             ViewsCount = viewsCount;
