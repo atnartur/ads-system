@@ -8,10 +8,13 @@ namespace AdsSystem.Stats
         public static void Init()
         {
             Console.WriteLine("INIT");
-            Task.Run(() => new StatsGathering().Run());
-            var startTimeSpan = TimeSpan.Zero;
-            var periodTimeSpan = TimeSpan.FromMinutes(5);
-            var t = new System.Threading.Timer(e => new StatsGathering().Run(), null, startTimeSpan, periodTimeSpan);
+            Task.Run(async () => {
+                while(true)
+                {
+                    new StatsGathering().Run();
+                    await Task.Delay(60 * 60 * 1000);
+                }
+            });
         }
     }
 }

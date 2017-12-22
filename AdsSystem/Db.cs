@@ -10,7 +10,7 @@ namespace AdsSystem
     public class Db : DbContext, IDesignTimeDbContextFactory<Db>
     {
         public static readonly LoggerFactory MyLoggerFactory
-            = new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
+            = new LoggerFactory(new[] { new ConsoleLoggerProvider((_, logLevel) => logLevel >= LogLevel.Information, false) });
 
         public static Db Instance
         {
