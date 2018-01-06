@@ -12,9 +12,10 @@ using System;
 namespace AdsSystem.Migrations
 {
     [DbContext(typeof(Db))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20180106160919_UserRoles")]
+    partial class UserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

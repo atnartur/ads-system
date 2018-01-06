@@ -17,6 +17,10 @@ namespace AdsSystem.Controllers
             model.Name = Request.Form["Name"][0];
             if (Request.Form["Pass"][0] != "")
                 model.Pass = Request.Form["Pass"][0];
+            if (Request.Form["Role"][0] == "Advertiser")
+                model.Role = UserRole.Advertiser;
+            else
+                model.Role = UserRole.Admin;
         }
 
         public static RouterDictionary GetRoutes() => GetRoutes("Users");
