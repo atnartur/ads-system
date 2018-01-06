@@ -13,15 +13,15 @@ namespace AdsSystem.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        
+
         [StringLength(255)]
         public string Email { get; set; }
-        
+
         [StringLength(255)]
         public string Name { get; set; }
 
         private string _pass;
-        
+
         [StringLength(255)]
         public string Pass { get => _pass; set => _pass = PassHash(value); }
 
@@ -49,5 +49,8 @@ namespace AdsSystem.Models
             {"Name", "Имя"},
             {"Pass", "Пароль"}
         };
+
+        public UserRole Role { get; set; }
     }
+    public enum UserRole { Admin, Advertiser }
 }

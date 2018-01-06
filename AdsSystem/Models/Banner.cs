@@ -46,6 +46,8 @@ namespace AdsSystem.Models
         public double ClicksCount { get; set; }
 
         public double Ctr { get; set; }
+        
+        public User Advertiser { get; set; }
 
         public List<BannersZones> BannersZones { get; set; }
         public List<View> Views { get; set; } = new List<View>();
