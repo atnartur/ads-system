@@ -23,6 +23,15 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-md-2" for="Role">Роль</label>
+        <div class="col-md-6">
+            <select name="Role" id="Role" required class="form-control">
+                <option value="Admin" {{#if info.Id }} {{{ifCond 'Admin' '==' info.Role 'selected' ' ' }}} {{/if}}>Администратор</option>
+                <option value="Advertiser" {{#if info.Id }} {{{ifCond 'Advertiser' '==' info.Role 'selected' ' ' }}} {{/if}}>Рекламодатель</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-md-8 col-md-offset-2">
             <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>

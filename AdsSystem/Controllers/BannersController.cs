@@ -33,11 +33,12 @@ namespace AdsSystem.Controllers
                         {
                             var zoneId = int.Parse(Request.Query["ZoneId"][0]);
                             query = db.BannersZones.Where(x => x.ZoneId == zoneId).Select(x => x.Banner);
-                            if (User.Role == UserRole.Advertiser)
-                                query = query.Where(x => x.Advertiser == User);
                         }
                         catch (FormatException) { }
                     }
+                    
+                    if (User.Role == UserRole.Advertiser)
+                        query = query.Where(x => x.Advertiser == User);
 
                     if (Request.Query["search"].Count > 0)
                     {
@@ -69,8 +70,9 @@ namespace AdsSystem.Controllers
             model.Priority = int.Parse(Request.Form["Priority"][0]);
             model.Html = Request.Form["Html"][0];
             model.MaxImpressions = int.Parse(Request.Form["MaxImpressions"][0]);
-            model.Advertiser = db.Users.Find(int.Parse(Request.Form["Advertiser"][0]));
-
+            
+            if (Request.Form["Advertiser"].Count > 0 && Request.Form["Advertiser"][0] != "")
+                model.Advertiser = db.Users.Find(int.Parse(Request.Form["Advertiser"][0]));
             if (Request.Form["StartTime"].Count > 0 && Request.Form["StartTime"][0] != "")
                 model.StartTime = DateTime.Parse(Request.Form["StartTime"][0]);
             if (Request.Form["EndTime"].Count > 0 && Request.Form["EndTime"][0] != "")
@@ -127,6 +129,8 @@ namespace AdsSystem.Controllers
                 if (model.Id != null)
                     havingZones = db.BannersZones.Where(x => x.BannerId == model.Id).Select(x => x.ZoneId).ToList();
 
+//                Vars.Add("Advertizer", model.Advertiser.Id);
+                
                 Vars.Add("zones", db.Zones.Select(x => new
                 {
                     x.Id,
@@ -134,6 +138,12 @@ namespace AdsSystem.Controllers
                     x.Width,
                     x.Height,
                     IsEnabled = havingZones.Contains(x.Id)
+                }).ToList());
+                
+                Vars.Add("advertizers", db.Users.Where(x => x.Role == UserRole.Advertiser).Select(x => new
+                {
+                    x.Id,
+                    x.Name
                 }).ToList());
             }
         }
