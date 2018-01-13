@@ -127,10 +127,20 @@ namespace AdsSystem.Controllers
             {
                 var havingZones = new List<int>();
 
+                var advertiserId = 0;
+                
                 if (model.Id != null)
+                {
                     havingZones = db.BannersZones.Where(x => x.BannerId == model.Id).Select(x => x.ZoneId).ToList();
 
-                //Vars.Add("Advertizer", model.Advertiser.Id);
+                    var conn = db.Database.GetDbConnection();
+                    conn.Open();
+                    var cmd = conn.CreateCommand();
+                    cmd.CommandText = "SELECT AdvertiserId FROM Banners WHERE Id = " + model.Id;
+                    advertiserId = (int) cmd.ExecuteScalar();
+                    Vars.Add("Advertizer", advertiserId);
+                    conn.Close();
+                }
 
                 Vars.Add("zones", db.Zones.Select(x => new
                 {
@@ -144,7 +154,8 @@ namespace AdsSystem.Controllers
                 Vars.Add("advertizers", db.Users.Where(x => x.Role == UserRole.Advertiser).Select(x => new
                 {
                     x.Id,
-                    x.Name
+                    x.Name,
+                    Selected = advertiserId == x.Id
                 }).ToList());
             }
         }

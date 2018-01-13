@@ -69,11 +69,10 @@
     <div class="form-group">
         <label class="control-label col-md-2" for="Advertiser">Рекламодатель</label>
         <div class="col-md-6">
-            {{Advertiser}}
             <select name="Advertiser" id="Advertiser" required class="form-control">
+                <option value="">Выбрать рекламодателя</option>
                 {{#each advertizers}}
-                    <option value="">Выбрать рекламодателя</option>
-                    <option value="{{Id}}" {{#if info.Id }} {{{ifCond Id '==' Advertiser 'selected' ' ' }}} {{/if}}>{{Name}}</option>
+                    <option value="{{Id}}" {{#if Selected}} selected {{/if}}>{{Name}}</option>
                 {{/each}}
             </select>
         </div>

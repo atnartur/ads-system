@@ -47,7 +47,7 @@ namespace AdsSystem.Models
 
         public double Ctr { get; set; }
         
-        public User Advertiser { get; set; }
+        public virtual User Advertiser { get; set; }
 
         public List<BannersZones> BannersZones { get; set; }
         public List<View> Views { get; set; } = new List<View>();
