@@ -25,7 +25,7 @@ function render(list) {
         let $row = $(template);
         
         for (const key in row) 
-            $row.find('.' + key).text(typeof row[key] !== 'object' ? row[key] : row[key].map(a => a.Name).join(', '));
+            $row.find('.' + key).text(!Array.isArray(row[key]) ? row[key] : row[key].map(a => a.Name).join(', '));
         
         extendLink($row, 'deleteLink', row.Id);
         extendLink($row, 'editLink', row.Id);
