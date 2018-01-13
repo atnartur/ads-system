@@ -36,7 +36,7 @@ namespace AdsSystem.Controllers
                         }
                         catch (FormatException) { }
                     }
-                    
+
                     if (User.Role == UserRole.Advertiser)
                         query = query.Where(x => x.Advertiser == User);
 
@@ -52,6 +52,7 @@ namespace AdsSystem.Controllers
                         x.Name,
                         x.ClicksCount,
                         x.ViewsCount,
+                        AdvertiserName = x.Advertiser.Name,
                         Zones = x.BannersZones.Select(y => new { Id = y.ZoneId, y.Zone.Name }).ToList()
                     });
                     return JsonConvert.SerializeObject(res);
@@ -70,7 +71,7 @@ namespace AdsSystem.Controllers
             model.Priority = int.Parse(Request.Form["Priority"][0]);
             model.Html = Request.Form["Html"][0];
             model.MaxImpressions = int.Parse(Request.Form["MaxImpressions"][0]);
-            
+
             if (Request.Form["Advertiser"].Count > 0 && Request.Form["Advertiser"][0] != "")
                 model.Advertiser = db.Users.Find(int.Parse(Request.Form["Advertiser"][0]));
             if (Request.Form["StartTime"].Count > 0 && Request.Form["StartTime"][0] != "")
@@ -129,8 +130,8 @@ namespace AdsSystem.Controllers
                 if (model.Id != null)
                     havingZones = db.BannersZones.Where(x => x.BannerId == model.Id).Select(x => x.ZoneId).ToList();
 
-//                Vars.Add("Advertizer", model.Advertiser.Id);
-                
+                //Vars.Add("Advertizer", model.Advertiser.Id);
+
                 Vars.Add("zones", db.Zones.Select(x => new
                 {
                     x.Id,
@@ -139,7 +140,7 @@ namespace AdsSystem.Controllers
                     x.Height,
                     IsEnabled = havingZones.Contains(x.Id)
                 }).ToList());
-                
+
                 Vars.Add("advertizers", db.Users.Where(x => x.Role == UserRole.Advertiser).Select(x => new
                 {
                     x.Id,
