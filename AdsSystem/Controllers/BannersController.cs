@@ -137,8 +137,13 @@ namespace AdsSystem.Controllers
                     conn.Open();
                     var cmd = conn.CreateCommand();
                     cmd.CommandText = "SELECT AdvertiserId FROM Banners WHERE Id = " + model.Id;
-                    advertiserId = (int) cmd.ExecuteScalar();
-                    Vars.Add("Advertizer", advertiserId);
+                    try
+                    {
+                        advertiserId = (int) cmd.ExecuteScalar();
+                        Vars.Add("Advertizer", advertiserId);
+                    }
+                    catch (InvalidCastException) {} // если это происходит, значит в БД null.
+
                     conn.Close();
                 }
 
