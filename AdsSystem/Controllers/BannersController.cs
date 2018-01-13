@@ -129,7 +129,7 @@ namespace AdsSystem.Controllers
 
                 var advertiserId = 0;
                 
-                if (model.Id != null)
+                if (model != null && model.Id != null && model.Id != 0)
                 {
                     havingZones = db.BannersZones.Where(x => x.BannerId == model.Id).Select(x => x.ZoneId).ToList();
 
