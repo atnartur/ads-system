@@ -9,6 +9,7 @@ namespace AdsSystem.Controllers
     {
         public HttpRequest Request { get; set; }
         public HttpResponse Response { get; set; }
+        protected Dictionary<string, object> Vars = new Dictionary<string, object>();
         protected User User = null;
 
         protected string Redirect(string url, int code = 302)
@@ -28,6 +29,7 @@ namespace AdsSystem.Controllers
             int id;
             int.TryParse(idStr, out id);
             User = Auth.Check(id, token);
+            Vars.Add("user", User);
             
             if (User == null)
             {
@@ -37,6 +39,19 @@ namespace AdsSystem.Controllers
                     return false;
                 }
             }
+            else
+            {
+                Vars.Add("IsAdmin", User.Role == UserRole.Admin);
+                if (User.Role == UserRole.Advertiser)
+                {
+                    if (!(controller == "BannersController" && action == "Index"))
+                    {
+                        Response.StatusCode = 403;
+                        return false;
+                    }
+                }
+            }
+
             return true;
         }
 

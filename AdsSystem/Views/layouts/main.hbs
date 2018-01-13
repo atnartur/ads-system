@@ -17,7 +17,27 @@
                 </a>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        
+                        <li class="dropdown user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-user"></i>
+                                {{user.Email}}
+                                <i class="fa fa-chevron-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-header" style="height: auto;">
+                                    <p>Вы вошли как</p>
+                                    <p>
+                                        {{user.Name}} ({{user.Email}})
+                                    </p>
+                                </li>
+
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a href="/logout" class="btn btn-default btn-flat"><i class="fa fa-power-off"></i> Выйти</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -25,10 +45,11 @@
         <aside class="main-sidebar">
             <section class="sidebar">
                 <ul class="sidebar-menu" id="menu">
-                    <li><a href="/users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
-                    <li><a href="/zones"><i class="fa fa-mobile"></i> <span>Зоны</span></a></li>
+                    {{#if IsAdmin}}
+                        <li><a href="/users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
+                        <li><a href="/zones"><i class="fa fa-mobile"></i> <span>Зоны</span></a></li>
+                    {{/if}}
                     <li><a href="/banners"><i class="fa fa-image"></i> <span>Баннеры</span></a></li>
-                    <li><a href="/logout"><i class="fa fa-sign-out"></i> <span>Выход</span></a></li>
                 </ul>
             </section>
         </aside>

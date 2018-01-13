@@ -13,7 +13,6 @@ namespace AdsSystem.Controllers
         protected abstract string ViewBase { get; }
         protected abstract Func<Db, DbSet<T>> DbSet { get; }
         protected abstract string[] RequiredFields { get; } 
-        protected Dictionary<string, object> Vars = new Dictionary<string, object>();
 
         protected abstract void Save(T model, Db db, HttpRequest request);
 

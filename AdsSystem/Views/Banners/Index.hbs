@@ -40,16 +40,18 @@
         <td class="ViewsCount"></td>
         <td class="ClicksCount"></td>
         <td>
-            <a class="btn btn-primary editLink" href="/banners/edit/">
-                <i class="fa fa-edit"></i>
-            </a>
-            <a
-                    class="btn btn-danger deleteLink"
-                    onclick="return confirm('Вы действительно хотите удалить баннер?');"
-                    href="/banners/delete/"
-            >
-                <i class="fa fa-trash-o"></i>
-            </a>
+            {{#if IsAdmin}}
+                <a class="btn btn-primary editLink" href="/banners/edit/">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <a
+                        class="btn btn-danger deleteLink"
+                        onclick="return confirm('Вы действительно хотите удалить баннер?');"
+                        href="/banners/delete/"
+                >
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            {{/if}}
         </td>
     </tr>
 </script>
