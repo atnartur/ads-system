@@ -30,6 +30,9 @@ namespace AdsSystem.Controllers
             int.TryParse(idStr, out id);
             User = Auth.Check(id, token);
             Vars.Add("user", User);
+
+            if (controller == "ApiController")
+                return true;
             
             if (User == null)
             {
