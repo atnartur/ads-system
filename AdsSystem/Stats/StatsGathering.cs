@@ -32,6 +32,7 @@ namespace AdsSystem.Stats
                 .ToList()
                 .ForEach(x =>
                 {
+                    Console.WriteLine("Stat gathering: banners - " + x.BannerId);
                     var banner = db.Banners.FirstOrDefault(y => y.Id == x.BannerId);
                     banner.ViewsCount = x.list.Count;
                     banner.ClicksCount = x.list.Count(y => y.IsClicked);
@@ -58,6 +59,7 @@ namespace AdsSystem.Stats
                     .ToList()
                     .ForEach(x =>
                     {
+                        Console.WriteLine("Stat gathering: days - " + x.Banner);
                         lastDay = lastDayCollection.FirstOrDefault(y => y.BannerId == x.Banner);
                         lastDay.ViewsCount = x.list.Count;
                         lastDay.ClicksCount = x.list.Count(y => y.IsClicked);
