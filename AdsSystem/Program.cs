@@ -26,7 +26,7 @@ namespace AdsSystem
                 .UseStartup<Startup>()
                 .UseKestrel()
                 .Build();
-
+            
             host.Run();
         }
     }

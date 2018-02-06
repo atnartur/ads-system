@@ -26,19 +26,18 @@ namespace AdsSystem.Stats
         void BannerStat(Db db)
         {
             Console.WriteLine("Stat gathering: banners");
-            db.Views
-                .GroupBy(x => x.BannerId)
-                .Select(x => new { BannerId = x.Key, list = x.ToList() })
-                .ToList()
-                .ForEach(x =>
-                {
-                    Console.WriteLine("Stat gathering: banners - " + x.BannerId);
-                    var banner = db.Banners.FirstOrDefault(y => y.Id == x.BannerId);
-                    banner.ViewsCount = x.list.Count;
-                    banner.ClicksCount = x.list.Count(y => y.IsClicked);
-                    banner.Ctr = banner.ViewsCount > 0 ? banner.ClicksCount / banner.ViewsCount : 0;
-                    db.Attach(banner);
-                });
+
+            var views = db.Views;
+
+            foreach (var banner in db.Banners)
+            {
+                banner.ViewsCount = views.Count(x => x.Id > banner.LastView && x.BannerId == banner.Id);
+                banner.ClicksCount = views.Count(x => x.Id > banner.LastView && x.IsClicked && x.BannerId == banner.Id);
+                banner.Ctr = banner.ViewsCount > 0 ? banner.ClicksCount / banner.ViewsCount : 0;
+                banner.LastView = views.Last().Id;
+                db.Attach(banner);
+            }
+
             db.SaveChanges();
         }
 
