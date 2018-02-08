@@ -46,6 +46,8 @@ namespace AdsSystem.Models
         public double ClicksCount { get; set; }
 
         public double Ctr { get; set; }
+
+        public int LastView { get; set; }
         
         public virtual User Advertiser { get; set; }
 
