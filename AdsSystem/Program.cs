@@ -19,7 +19,7 @@ namespace AdsSystem
             using (var instance = Db.Instance)
                 instance.Database.Migrate();
 
-//            StatsRunner.Init();
+            StatsRunner.Init();
             
             var host = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())

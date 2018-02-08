@@ -32,18 +32,6 @@ namespace AdsSystem
         {
             Handlebars.RegisterHelper("ifCond", (writer, context, args) =>
             {
-                foreach (var arg in args)
-                {
-                    try
-                    {
-                        Console.WriteLine((int) arg);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        Console.WriteLine((string) arg);
-
-                    }
-                }
                 if (args.Length != 5)
                 {
                     writer.Write("ifCond:Wrong number of arguments");

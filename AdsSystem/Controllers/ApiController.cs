@@ -51,6 +51,7 @@ namespace AdsSystem.Controllers
                 Response.StatusCode = 200;
                 return View("ApiReturn", new Dictionary<string, object>
                 {
+                    {"noStatic", true},
                     {"layout", "empty"},
                     {"Height", zone.Height},
                     {"Width", zone.Width},
