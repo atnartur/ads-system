@@ -42,7 +42,7 @@ namespace AdsSystem.Stats
             db.SaveChanges();
         }
 
-        double Ctr(double views, double clicks) => views > 0 ? clicks / views : 0;
+        double Ctr(double views, double clicks) => views > 0 ? clicks / views * 100 : 0;
         
         void DayStat(Db db)
         {
@@ -83,10 +83,10 @@ namespace AdsSystem.Stats
                 var views = isHaveDayStats ? db.Views.Where(x => x.Time > db.DayStats.Last().Date) : db.Views;
 
                 views
-                    .GroupBy(x => new { x.Time.Date, x.BannerId })
+                    .GroupBy(x => new { x.Time.Day, x.Time.Month, x.Time.Year, x.BannerId })
                     .Select(x => new {
+                        x.First().Time.Date,
                         x.Key.BannerId,
-                        x.Key.Date.Date,
                         ViewsCount = x.Count(),
                         ClicksCount = x.Count(y => y.IsClicked)
                     })
