@@ -24,7 +24,7 @@ namespace AdsSystem
                 var name = Environment.GetEnvironmentVariable("DB_NAME") ?? "ads";
 
                 optionsBuilder.UseMySql("server=" + host + ";uid=" + user + ";pwd=" + pass + ";database=" + name);
-//                optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+                optionsBuilder.UseLoggerFactory(MyLoggerFactory);
                 return new Db(optionsBuilder.Options);
             }
         }

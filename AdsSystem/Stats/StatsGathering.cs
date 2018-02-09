@@ -31,60 +31,79 @@ namespace AdsSystem.Stats
 
             foreach (var banner in db.Banners)
             {
+                Console.WriteLine("Stat gathering: banners - " + banner.Id);
                 banner.ViewsCount = views.Count(x => x.Id > banner.LastView && x.BannerId == banner.Id);
                 banner.ClicksCount = views.Count(x => x.Id > banner.LastView && x.IsClicked && x.BannerId == banner.Id);
-                banner.Ctr = banner.ViewsCount > 0 ? banner.ClicksCount / banner.ViewsCount : 0;
-                banner.LastView = views.Last().Id;
+                banner.Ctr = Ctr(banner.ViewsCount, banner.ClicksCount);
+                banner.LastView = views.OrderByDescending(x => x.Id).First().Id;
                 db.Attach(banner);
             }
 
             db.SaveChanges();
         }
 
+        double Ctr(double views, double clicks) => views > 0 ? clicks / views : 0;
+        
         void DayStat(Db db)
         {
             Console.WriteLine("Stat gathering: days");
-            var count = db.DayStats.Count();
-            if (count != 0 && db.DayStats.Last().Date == DateTime.Now.Date)
+            var isHaveDayStats = db.DayStats.FirstOrDefault() != null; // есть ли у нас статистика по дням
+
+            // когда коллекция пустая, не получается достать первый элемент.
+            // Значит у нас просто нет баннеров в этой таблице еще
+            DayStats lastDay = db.DayStats.OrderByDescending(x => x.Id).FirstOrDefault();
+            
+            // если статистика за сегодня уже собиралась
+            if (isHaveDayStats && lastDay != null && lastDay.Date == DateTime.Now.Date)
             {
-                var views = db.Views.Where(x => x.Time.Date == db.DayStats.Last().Date).ToList();
+                var views = db.Views.Where(x => x.Time.Date == db.DayStats.Last().Date);
 
                 var lastDayCollection = db.DayStats.Where(x => x.Date.Date == DateTime.Now.Date);
-                DayStats lastDay;
 
                 views
                     .GroupBy(x => x.BannerId)
-                    .Select(x => new { Banner = x.Key, list = x.ToList() })
+                    .Select(x => new {
+                        BannerId = x.Key,
+                        ViewsCount = x.Count(),
+                        ClicksCount = x.Count(y => y.IsClicked)
+                    })
                     .ToList()
                     .ForEach(x =>
                     {
-                        Console.WriteLine("Stat gathering: days - " + x.Banner);
-                        lastDay = lastDayCollection.FirstOrDefault(y => y.BannerId == x.Banner);
-                        lastDay.ViewsCount = x.list.Count;
-                        lastDay.ClicksCount = x.list.Count(y => y.IsClicked);
-                        lastDay.Ctr = lastDay.ViewsCount > 0 ? lastDay.ClicksCount / lastDay.ViewsCount : 0;
+                        Console.WriteLine("Stat gathering: days - " + x.BannerId);
+                        lastDay = lastDayCollection.FirstOrDefault(y => y.BannerId == x.BannerId);
+                        lastDay.ViewsCount = x.ViewsCount;
+                        lastDay.ClicksCount = x.ClicksCount;
+                        lastDay.Ctr = Ctr(lastDay.ViewsCount, lastDay.ClicksCount);
                         db.Attach(lastDay);
                     });
             }
-            else
-            {
-                var views = db.Views.ToList();
-
-                if (count != 0)
-                    views = views.Where(x => x.Time > db.DayStats.Last().Date).ToList();
+            else // если нет, считаем всё
+            { 
+                var views = isHaveDayStats ? db.Views.Where(x => x.Time > db.DayStats.Last().Date) : db.Views;
 
                 views
                     .GroupBy(x => new { x.Time.Date, x.BannerId })
-                    .Select(x => new { TimeAndBanner = x.Key, list = x.ToList() })
+                    .Select(x => new {
+                        x.Key.BannerId,
+                        x.Key.Date.Date,
+                        ViewsCount = x.Count(),
+                        ClicksCount = x.Count(y => y.IsClicked)
+                    })
                     .ToList()
-                    .ForEach(x => db.DayStats.Add(new DayStats()
+                    .ForEach(x =>
                     {
-                        BannerId = x.TimeAndBanner.BannerId,
-                        ViewsCount = x.list.Count,
-                        ClicksCount = x.list.Count(y => y.IsClicked),
-                        Ctr = x.list.Count(y => y.IsClicked) / x.list.Count,
-                        Date = x.TimeAndBanner.Date.Date
-                    }));
+                        Console.WriteLine("Stat gathering: days - " + x.BannerId);
+                        
+                        db.DayStats.Add(new DayStats
+                        {
+                            BannerId = x.BannerId,
+                            ViewsCount = x.ViewsCount,
+                            ClicksCount = x.ClicksCount,
+                            Ctr = Ctr(x.ViewsCount, x.ClicksCount),
+                            Date = x.Date
+                        });
+                    });
             }
 
             db.SaveChanges();
