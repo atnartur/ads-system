@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using AdsSystem.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace AdsSystem.Stats
 {
@@ -17,7 +16,7 @@ namespace AdsSystem.Stats
             using (var db = Db.Instance)
             {
                 BannerStat(db);
-                DayStat(db);
+//                DayStat(db);
             }
             sw.Stop();
             Console.WriteLine("Stat gathering (" + startTime + ") finished on " + sw.Elapsed.TotalSeconds + " seconds");
@@ -32,8 +31,8 @@ namespace AdsSystem.Stats
             foreach (var banner in db.Banners)
             {
                 Console.WriteLine("Stat gathering: banners - " + banner.Id);
-                banner.ViewsCount = views.Count(x => x.Id > banner.LastView && x.BannerId == banner.Id);
-                banner.ClicksCount = views.Count(x => x.Id > banner.LastView && x.IsClicked && x.BannerId == banner.Id);
+                banner.ViewsCount += views.Count(x => x.Id > banner.LastView && x.BannerId == banner.Id);
+                banner.ClicksCount += views.Count(x => x.Id > banner.LastView && x.IsClicked && x.BannerId == banner.Id);
                 banner.Ctr = Ctr(banner.ViewsCount, banner.ClicksCount);
                 banner.LastView = views.OrderByDescending(x => x.Id).First().Id;
                 db.Attach(banner);
